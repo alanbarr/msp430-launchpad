@@ -1,7 +1,9 @@
 Copyright Notice:
-Much of the hardware register setup was taken from TI's: slac458a msp430g2xx3
-                                                         slac467a msp430g2xx2 code examples.
-(C) D. Dang, Texas Instruments Inc. - December 2010, February 2011
+Much of the hardware setup was taken from the following TI code examples: 
+G2xx1 http://www.ti.com/lit/zip/slac463
+G2xx2 http://www.ti.com/lit/zip/slac467
+G2xx3 http://www.ti.com/lit/zip/slac485
+(C) D. Dang, Texas Instruments Inc. - 2010, 2011
 
 Modified and built upon by:
 (C) Alan Barr 2011
