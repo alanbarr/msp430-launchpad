@@ -1,0 +1,20 @@
+Common contains some useful functions which may be useful in other projects.
+
+usefulFunctions
+    Run make in usefulFunctionSource if you wish to use any of the functions in 
+    usefulFunctions.h. It creates a library called usefulFunctions.a in common.
+    Many of them are what you would expect to find in libc so you may well prefer
+    to use that.
+
+uart
+    The uart code is based on TI's example code, but modified for my needs - mainly
+    to make it a standalone module.
+    The uart is bit-banged from TimerA.
+    uart uses TimerA0 - 1.1 TX 1.2 RX
+    uart1 uses TimerA1 - 2.0 TX 2.2 RX
+    TimerA1 is the second TimerA found in certain mcus such as msp430g2553.
+
+i2c
+    Needs to be tidied before being pushed.
+
+
