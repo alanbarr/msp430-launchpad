@@ -3,9 +3,21 @@ Much of the hardware setup was taken from the following TI code examples:
 G2xx1 http://www.ti.com/lit/zip/slac463
 G2xx2 http://www.ti.com/lit/zip/slac467
 G2xx3 http://www.ti.com/lit/zip/slac485
+
 (C) D. Dang, Texas Instruments Inc. - 2010, 2011
 
 Modified and built upon by:
 (C) Alan Barr 2011
+
+Much of the code will be simply me experimenting with different features of the
+msp430 mcu's, and I will try to explain the code clearly. If I ever do get around
+to a project I will do my best to document everything clearly, schematics etc.
+
+Most things I will push will most likely be for mspgcc but I will make clear what
+compiler was used. The only things that generally have to be changed when moving 
+between ccs and mspgcc are the interrupts and potentially some header files.
+
+See projectSummary.txt for an idea of what is used in each "project", if you are 
+after a particular example. 
 
 

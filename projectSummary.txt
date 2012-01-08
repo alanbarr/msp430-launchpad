@@ -1,0 +1,6 @@
+ldrAndBiColourLed
+    summary:    Uses an ldr to measure light intensity, and outputs this to a bi-colour led.
+    hw:         Launchpad + LDR + 56 kohm resistor + bi-colour LED
+    compiler:   mspgcc
+    code:       Port interrupts, Timer A PWM, ADC
+    
