@@ -1,6 +1,14 @@
+common
+    summary:    Some useful bits of standalone code - see the readme in the folder.
+
 ldrAndBiColourLed
     summary:    Uses an ldr to measure light intensity, and outputs this to a bi-colour led.
     hw:         Launchpad + LDR + 56 kohm resistor + bi-colour LED
     compiler:   mspgcc
     code:       Port interrupts, Timer A PWM, ADC
-    
+
+wdtClock 
+    summary:    Fundentals of a clock with a resolution of seconds.
+    hw:         Launchpad + crystal. (I used a 6 pf crystal, change BCSCTL3 as required)
+    compiler:   mspgcc
+    code:       Watchdog Timer with interval interrupts.

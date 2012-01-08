@@ -1,4 +1,4 @@
-Copyright Notice:
+****** Copyright Notice ******
 Much of the hardware setup was taken from the following TI code examples: 
 G2xx1 http://www.ti.com/lit/zip/slac463
 G2xx2 http://www.ti.com/lit/zip/slac467
@@ -9,6 +9,7 @@ G2xx3 http://www.ti.com/lit/zip/slac485
 Modified and built upon by:
 (C) Alan Barr 2011
 
+****** msp430-launchpad ******
 Much of the code will be simply me experimenting with different features of the
 msp430 mcu's, and I will try to explain the code clearly. If I ever do get around
 to a project I will do my best to document everything clearly, schematics etc.
@@ -20,4 +21,27 @@ between ccs and mspgcc are the interrupts and potentially some header files.
 See projectSummary.txt for an idea of what is used in each "project", if you are 
 after a particular example. 
 
+All mspgcc code folders should be accompanied by a makefile - to build type "make"
+from the terminal.
 
+****** Datasheets ******
+Here are some (potentially dead) links to datasheets:
+
+Family User Guide:      http://www.ti.com/litv/pdf/slau144h 
+
+msp430g2211:
+    msp430g2x01, msp430g2x11        http://www.ti.com/lit/gpn/msp430g2211
+msp430g2231:
+   msp430g2x21, msp430g2x31         http://www.ti.com/lit/gpn/msp430g2231 
+msp430g2452:
+    msp430g2x52, msp430g2x12        http://www.ti.com/lit/gpn/msp430g2452
+msp430g2553:
+    msp430g2x53, msp430g2x13        http://www.ti.com/lit/gpn/msp430g2553
+
+****** Resources ******
+Here are some useful websites I have came across:
+
+http://www.43oh.com/
+http://hackaday.com/tag/msp430/
+http://www.msp430launchpad.com/
+http://e2e.ti.com/blogs_/b/msp430blog/default.aspx
