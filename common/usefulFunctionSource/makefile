@@ -14,6 +14,7 @@ all: floatToString.o \
      stringToUnsignedInt.o 
 
 	$(AR) $(ARFLAGS) ../usefulFunctions.a $^
+	rm $^
 
 %.o:
 	$(CC) $(CCFLAGS) -c $*.c 

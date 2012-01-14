@@ -11,8 +11,11 @@ Modified and built upon by:
 
 ****** msp430-launchpad ******
 Much of the code will be simply me experimenting with different features of the
-msp430 mcu's, and I will try to explain the code clearly. If I ever do get around
-to a project I will do my best to document everything clearly, schematics etc.
+msp430 mcu's, and I will try to clearly comment the code. If I ever do get around
+to a reasonable project I will do my best to explain all the important details.
+
+I intend to update this repo fairly often with smaller projects and code examples.
+(And hopefully with larger projects as submodules)
 
 Most things I will push will most likely be for mspgcc but I will make clear what
 compiler was used. The only things that generally have to be changed when moving 
