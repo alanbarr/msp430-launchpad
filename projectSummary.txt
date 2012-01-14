@@ -1,6 +1,12 @@
 common
     summary:    Some useful bits of standalone code - see the readme in the folder.
 
+simpleCli
+    summary:    Light Launchpad LEDs by sending commands over UART.
+    hw:         Launchpad
+    compiler:   mspgcc
+    code:       Example of of software reset by incorrect watchdog password.
+
 crystalTest
     summary:    Fault testing of a 32768 Hz crystal
     hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required)
@@ -8,13 +14,13 @@ crystalTest
     code:       Watchdog Timer interval interrupts, Non Maskable Interrupt Oscillator fault
 
 ldrAndBiColourLed
-    summary:    Uses an ldr to measure light intensity, and outputs this to a bi-colour led.
+    summary:    Uses an LDR to measure light intensity, and outputs this to a bi-colour led.
     hw:         Launchpad + LDR + 56 kohm resistor + bi-colour LED
     compiler:   mspgcc
     code:       Port interrupts, Timer A PWM, ADC
 
 wdtClock 
-    summary:    Fundentals of a clock with a resolution of seconds.
+    summary:    Fundamentals of a clock with a resolution of seconds.
     hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required)
     compiler:   mspgcc
     code:       Watchdog Timer interval interrupts.

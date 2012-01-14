@@ -6,8 +6,10 @@
 
 /*  
     Compares a string to a base or master string.
-   `Returns 0 for identical, 1 for string two identical until space in place of NULL,
-   -1 for not identical
+    Returns:
+    0 for identical,
+    1 for string two identical until white space in place of NULL,
+    -1 for not identical
 */
 int stringCompare(char * masterString, char * comparisonString)
 {

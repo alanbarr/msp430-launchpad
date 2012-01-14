@@ -10,7 +10,7 @@
 #include "legacymsp430.h"
 #include "msp430.h"
     
-#define UARTBUFSIZE     10
+#define UARTBUFSIZE     20
 
 #define UART_TXD        0x02                                // TXD on P1.1 (Timer0_A.OUT0)
 #define UART_RXD        0x04                                // RXD on P1.2 (Timer0_A.CCI1A)
