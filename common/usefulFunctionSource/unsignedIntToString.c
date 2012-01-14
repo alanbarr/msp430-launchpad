@@ -10,16 +10,11 @@ void unsignedIntToString(unsigned int integer, char * integerString)
 	int tempIndex = 0;
 	int index = 0;
 	
-	if (integer < 0)
-	{	
-		integerString[index++] = '-';
-		integer = -integer;
-	}
 	do
 	{
 		tempIntegerString[tempIndex++] = integer%10 + '0';	
 	}
-	while( (integer /= 10) > 0);
+    while( (integer /= 10) != 0);
 	
 	tempIndex--;
 	

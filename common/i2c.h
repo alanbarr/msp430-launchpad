@@ -11,29 +11,15 @@
 #include <string.h>
 #include <legacymsp430.h>
 
-#define TEMPREG 0x00
 #define FLASH 0x50
 
-extern char i2cPolling;
-extern int i2cRXByteCtr;
-extern char *pI2cTxData;          
-extern char *pI2cRxData;    
-extern char i2cTXByteCtr;
-extern char i2cRX;
-extern unsigned int i2cNacks;
-extern int i2cNoi;
+void i2cSetupTx(char address);
+void i2cSetupRx(char address);
 
+void i2cSetupPins(void);
+void i2cTransmit(const char * data, const int numberOfBytes);
+void i2cReceive(volatile char * data, const int numberOfBytes);
 
-void Setup_TX(char address);
-void Setup_RX(char address);
-
-void setupI2cPins(void);
-void i2cTransmit(char * data, int numberOfBytes);
-void i2cReceive(volatile char * data, int numberOfBytes);
-void i2cFlashWrite(char * data, char i2cAddress, unsigned int internalAddress, int numberOfBytes);
-void i2cRandomRead(volatile char * data, char i2cAddress, unsigned int internalAddress, int numberOfBytes);
-void i2cPoll(char address);
-void i2cTempRead(char tempAddress, char * buffer);
-float i2cConvertTemp(char *buffer);
+void i2cPoll(const char address);
 
 #endif /*I2C_H_*/

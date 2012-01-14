@@ -11,7 +11,7 @@ uart
     to make it a standalone module.
     The uart is bit-banged from TimerA.
     uart uses TimerA0 - 1.1 TX 1.2 RX
-    uart1 uses TimerA1 - 2.0 TX 2.2 RX
+    uart1 uses TimerA1 - 2.0 TX 2.1 RX
     TimerA1 is the second TimerA found in certain mcus such as msp430g2553.
 
 i2c
