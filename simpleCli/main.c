@@ -1,4 +1,7 @@
-/* Copyright (C) Alan Barr 2012 */
+/*
+** Author: Alan Barr 
+** Created: 2011
+*/
 /* Builds with mspgcc */
 /* This project demonstrates a simple command line interface on the launchpad
 ** Communication with the launchpad is achieved over the usb UART interface

@@ -1,6 +1,6 @@
 /*
-* Copyright (C)
-* Alan Barr 2011
+* Author: Alan Barr 
+* Created: 2011
 */
 
 #ifndef I2C_FLASH_MEMORY_H_

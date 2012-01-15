@@ -1,8 +1,10 @@
 /*
- * A basic clock functionality using WDT.
- * Using a 6 pF C-001R crystal for ACLK.
- */
-/* Copyright (C) Alan Barr 2012*/
+** Author: Alan Barr 
+** Created: 2011
+**
+** A basic clock functionality using WDT.
+** Using a 6 pF C-001R crystal for ACLK.
+*/
 
 #include "msp430g2553.h"
 #include "legacymsp430.h"

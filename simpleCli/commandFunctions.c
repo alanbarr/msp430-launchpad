@@ -1,4 +1,7 @@
-/* Copyright (C) Alan Barr 2011 */
+/*
+** Author: Alan Barr 
+** Created: 2011
+*/
 /* Builds with mspgcc */
 /* This file contains the commands which can be ran over UART */
 #include "cli.h"

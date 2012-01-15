@@ -1,22 +1,25 @@
-/*  Written for mspgcc
- *  Visualises current light level measured from an LDR using ADC
- *  to a bi-colour LED. The LED transitions from one colour to 
- *  another depending on light level using PWM. Pressing switch
- *  1.3 on the launchpad will change which colour represents high
- *  and low light levels.
- *  
- *  1.3 - Launchpad Switch             2.1 - Bi Colour LED Red Leg
- *                                           Bi Colour LED GND - Launchpad GND
- *                                     2.4 - Bi Colour LED Green Leg
- *       VCC
- *        |
- *       LDR
- *  1.4 - | 
- *       56 kohm Resistor 
- *        |
- *       GND
- */
-/* Copyright (c) Alan Barr 2012*/
+/*
+**  Author: Alan Barr 
+**  Created: 2011
+**
+**  Written for mspgcc
+**  Visualises current light level measured from an LDR using ADC
+**  to a bi-colour LED. The LED transitions from one colour to 
+**  another depending on light level using PWM. Pressing switch
+**  1.3 on the launchpad will change which colour represents high
+**  and low light levels.
+**  
+**  1.3 - Launchpad Switch             2.1 - Bi Colour LED Red Leg
+**                                           Bi Colour LED GND - Launchpad GND
+**                                     2.4 - Bi Colour LED Green Leg
+**       VCC
+**        |
+**       LDR
+**  1.4 - | 
+**       56 kohm Resistor 
+**        |
+**       GND
+*/
 
 #include "msp430g2553.h"
 #include "legacymsp430.h"

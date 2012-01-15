@@ -1,7 +1,8 @@
 /*
- * Copyright (C) Alan Barr 2011
- * Tailored functionality to libc, may be preferable to use that.
- */
+** Author: Alan Barr 
+** Created: 2011
+** Tailored functionality to libc, may be preferable to use that.
+*/
 
 #ifndef USEFULFUNCTIONS_H_
 #define USEFULFUNCTIONS_H_

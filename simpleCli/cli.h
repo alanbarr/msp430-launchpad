@@ -1,4 +1,8 @@
-/* Copyright (C) Alan Barr 2012 */
+/*
+** Author: Alan Barr 
+** Created: 2011
+*/
+
 /* Builds with mspgcc */
 
 #ifndef CLI_H_

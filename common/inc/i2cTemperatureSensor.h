@@ -1,3 +1,8 @@
+/*
+**Author: Alan Barr
+**Created: 2012
+*/
+
 #ifndef I2C_TEMP_H_
 #define I2C_TEMP_H_
 

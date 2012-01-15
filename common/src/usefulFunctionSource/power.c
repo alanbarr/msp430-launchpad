@@ -1,7 +1,7 @@
 /*
- * Copyright (C)
- * Alan Barr 2011
- */
+** Author: Alan Barr
+** Created: 2011
+*/
 #include "usefulFunctions.h"
 
 long power(int base, int power)
