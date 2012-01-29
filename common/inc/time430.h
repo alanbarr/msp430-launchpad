@@ -44,12 +44,6 @@
 #endif 
 
 
-/* TIME430_DELAY_-S Limitations
-**  1Mhz    65MS / 65535US
-**  2Mhz    32MS / 32767US
-**  8Mhz    8MS  / 8192US 
-**  16Mhz   2MS  / 4096US
-*/
 #define TIME430_DELAY_US(x)     __delay_cycles((x) * TIME430_US_CYCLES)
 #define TIME430_DELAY_MS(x)     __delay_cycles((x) * TIME430_MS_CYCLES)
 

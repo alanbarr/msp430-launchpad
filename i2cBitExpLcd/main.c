@@ -2,14 +2,15 @@
 ** Created: Jan 2012 */
 #include "msp430g2553.h"
 #include "i2cBitExpanderLcd.h"
+#include "time430.h"
 int main(void)
 {
     WDTCTL = WDTPW + WDTHOLD;
     TIME430_CALIBRATE_CLOCK();
     P1DIR = BIT0;
     P1OUT &=~BIT0;
-    __delay_cycles(100UL);
-    __delay_cycles(100UL);
+    TIME430_DELAY_MS(100UL);
+    TIME430_DELAY_MS(100UL);
     
     i2cSetupPins();
     i2cLcdInit();

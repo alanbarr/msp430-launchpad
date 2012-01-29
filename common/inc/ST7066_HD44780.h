@@ -93,7 +93,7 @@
 #define ST7066_START_UP_COMMAND             0x30
 
 /* Read Data Settings */
-#define ST7066_BUSY_BIT                     ST7066_DB7
+#define ST7066_BUSY_FLAG                    ST7066_DB7
 
 #define ST7066_LINE0_POS0                   1
 #define ST7066_LINE0_POS1                   2

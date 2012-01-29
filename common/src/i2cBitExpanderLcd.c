@@ -26,7 +26,7 @@ void i2cLcdInit(void)
     i2cLcdChangeExpanderPinsOutput();
 
     /* Setup LCD pins as low */
-    transmitBuffer[0] = MCP23017_GPIOA;
+    transmitBuffer[0] = LCD_PORT_ADDRESS_OUTPUT;
     transmitBuffer[1] = 0x00;
     i2cTransmit(transmitBuffer,2);
     
@@ -40,22 +40,21 @@ void i2cLcdInit(void)
     /*First clock*/
     transmitBuffer[1] |= ST7066_E;
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] = ST7066_START_UP_COMMAND;
     i2cTransmit(transmitBuffer,2);
     TIME430_DELAY_MS(5);
     /*Second clock*/
     transmitBuffer[1] |= ST7066_E;
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
-    
+    LCD_E_WAIT();
     transmitBuffer[1] = ST7066_START_UP_COMMAND;
     i2cTransmit(transmitBuffer,2);
     TIME430_DELAY_US(200);
     /*Third clock*/
     transmitBuffer[1] |= ST7066_E;
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] = 0x00;
     i2cTransmit(transmitBuffer,2);
     TIME430_DELAY_US(200);
@@ -88,11 +87,11 @@ void i2cLcdInit(void)
 ** The argument data is the data bits on the lcd. */
 void i2cLcdInstructionSendCommand(const char data)
 {
-    char transmitBuffer[2] = {MCP23017_GPIOA, (data & 0xF0) | 
+    char transmitBuffer[2] = {LCD_PORT_ADDRESS_OUTPUT, (data & 0xF0) | 
                               ST7066_INSTRUCTION_WRITE };
     
     /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & LCD_BUSY_FLAG)
+    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
     {
         P1OUT ^= BIT0;
         LCD_BUSY_WAIT();   
@@ -106,12 +105,11 @@ void i2cLcdInstructionSendCommand(const char data)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
-
+    LCD_E_WAIT();
     transmitBuffer[1] &= ~ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] = 0x00;
     i2cTransmit(transmitBuffer,2);
     /*Clocked Upper Nibble */
@@ -125,11 +123,11 @@ void i2cLcdInstructionSendCommand(const char data)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] &= ~ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] = 0x00;
     i2cTransmit(transmitBuffer,2);
     /*Lower Nibble Clocked*/
@@ -144,7 +142,7 @@ char i2cLcdReadBusyFlagAndAddress(void)
 {
     char readData = 0;
     char returnData = 0;
-    char transmitBuffer[2] = {MCP23017_GPIOA, ST7066_INSTRUCTION_READ};
+    char transmitBuffer[2] = {LCD_PORT_ADDRESS_OUTPUT, ST7066_INSTRUCTION_READ};
     return 0;
     i2cLcdChangeExpanderPinsInput();
     
@@ -155,7 +153,7 @@ char i2cLcdReadBusyFlagAndAddress(void)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     
     i2cSetupRx(LCD_BITEXPANDER_ADDR);
     i2cReceive(&readData,1);
@@ -174,7 +172,7 @@ char i2cLcdReadBusyFlagAndAddress(void)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     
     i2cSetupRx(LCD_BITEXPANDER_ADDR);
     i2cReceive(&readData,1);
@@ -197,9 +195,9 @@ char i2cLcdReadBusyFlagAndAddress(void)
 ** of LCD pins DB0 - DB7*/
 void i2cLcdWriteDataToRam(const char data)
 {
-    char transmitBuffer[2] = { MCP23017_GPIOA, (data & 0xF0) | ST7066_DATA_WRITE };
+    char transmitBuffer[2] = { LCD_PORT_ADDRESS_OUTPUT, (data & 0xF0) | ST7066_DATA_WRITE };
     /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & LCD_BUSY_FLAG)
+    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
     {
         LCD_BUSY_WAIT();
     }
@@ -210,7 +208,7 @@ void i2cLcdWriteDataToRam(const char data)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] &= ~ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
@@ -225,7 +223,7 @@ void i2cLcdWriteDataToRam(const char data)
     transmitBuffer[1] |= ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     transmitBuffer[1] &= ~ST7066_E;
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
@@ -240,12 +238,12 @@ void i2cLcdWriteDataToRam(const char data)
 ** char return.*/
 char i2cLcdReadDataFromRam(void)
 {
-    char transmitBuffer[2] = {MCP23017_GPIOA, ST7066_DATA_READ };
+    char transmitBuffer[2] = {LCD_PORT_ADDRESS_OUTPUT, ST7066_DATA_READ };
     char readData = 0;
     char returnData = 0;
 
     /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & LCD_BUSY_FLAG)
+    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
     {
         LCD_BUSY_WAIT();
     }
@@ -259,7 +257,7 @@ char i2cLcdReadDataFromRam(void)
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
     transmitBuffer[1] |= ST7066_E;
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
     i2cSetupRx(LCD_BITEXPANDER_ADDR);
@@ -278,7 +276,7 @@ char i2cLcdReadDataFromRam(void)
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
     transmitBuffer[1] |= ST7066_E;
-    LCD_E_HIGH_WAIT();
+    LCD_E_WAIT();
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
     
@@ -301,10 +299,10 @@ char i2cLcdReadDataFromRam(void)
 ** Sets pins to low.*/
 void i2cLcdChangeExpanderPinsInput(void)
 {
-    char transmitBuffer[2] = { MCP23017_IODIRA, LCD_PINS_INPUT };
+    char transmitBuffer[2] = { LCD_PORT_ADDRESS_DIRECTION, LCD_PINS_INPUT };
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    transmitBuffer[0] = MCP23017_GPIOA;
+    transmitBuffer[0] = LCD_PORT_ADDRESS_OUTPUT;
     transmitBuffer[1] = 0x00;
 }
 
@@ -313,10 +311,10 @@ void i2cLcdChangeExpanderPinsInput(void)
 ** Sets pins to low.*/
 void i2cLcdChangeExpanderPinsOutput(void)
 {
-    char transmitBuffer[2] = { MCP23017_IODIRA, LCD_PINS_OUTPUT };
+    char transmitBuffer[2] = { LCD_PORT_ADDRESS_DIRECTION, LCD_PINS_OUTPUT };
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
-    transmitBuffer[0] = MCP23017_GPIOA;
+    transmitBuffer[0] = LCD_PORT_ADDRESS_OUTPUT;
     transmitBuffer[1] = 0x00;
 }
 
