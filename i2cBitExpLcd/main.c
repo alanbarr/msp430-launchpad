@@ -15,6 +15,9 @@ int main(void)
     i2cLcdInit();
     
     i2cLcdPrint("Hello World!"); 
+
+    LCD_DDRAM_ADDRESS_SET(ST7066_LINE1_POS0);
+    i2cLcdPrint("MSP-LAUNCHPAD");
     
     /*Sleep*/
     __bis_SR_register(LPM4_bits); 

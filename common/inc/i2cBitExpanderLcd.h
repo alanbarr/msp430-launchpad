@@ -103,8 +103,8 @@ void i2cLcdPrint(const char const * string);
 #define LCD_DISPLAY_ON_OFF(d)       i2cLcdInstructionSendCommand(ST7066_DISPLAY_ON_OFF_BITS | (d))
 #define LCD_CUR_DISP_SHIFT(d)       i2cLcdInstructionSendCommand(ST7066_CUR_DISP_SHIFT_BITS | (d))
 #define LCD_FUNCTION_SET(d)         i2cLcdInstructionSendCommand(ST7066_FUNCTION_SET_BITS   | (d))
-#define LCD_CGRAM_ADDRESS_SET()     i2cLcdInstructionSendCommand(ST7066_CGRAM_BITS          | (d))
-#define LCD_DDRAM_ADDRESS_SET()     i2cLcdInstructionSendCommand(ST7066_DDRAM_BITS          | (d))
+#define LCD_CGRAM_ADDRESS_SET(d)    i2cLcdInstructionSendCommand(ST7066_CGRAM_BITS          | (d))
+#define LCD_DDRAM_ADDRESS_SET(d)    i2cLcdInstructionSendCommand(ST7066_DDRAM_BITS          | (d))
 
 
 #define LCD_BUSY_FLAG           0x80
