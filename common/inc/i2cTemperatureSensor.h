@@ -7,8 +7,7 @@
 #define I2C_TEMP_H_
 
 #include "i2c.h"
-
-#define TEMPREG 0x00
+#include "TMP102.h"
 
 void i2cTSRead(const char tempAddress, char * buffer);
 float i2cTSConvertTemp(char * buffer);

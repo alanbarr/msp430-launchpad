@@ -13,7 +13,6 @@ usefulFunctions:    floatToString.o \
                     memClear.o \
                     setupDefaultPins.o \
                     stringToUnsignedInt.o \
-                    delay.o
 
 	$(AR) $(ARFLAGS) $(LIBPATH) $^
 	rm $^

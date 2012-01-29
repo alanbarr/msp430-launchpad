@@ -5,7 +5,7 @@ simpleCli
     summary:    Light Launchpad LEDs by sending commands over UART.
     hw:         Launchpad
     compiler:   mspgcc
-    code:       Example of of software reset by incorrect watchdog password.
+    code:       Example of of software reset by incorrect watchdog password. Bit Banged UART.
 
 crystalTest
     summary:    Fault testing of a 32768 Hz crystal
@@ -24,3 +24,16 @@ wdtClock
     hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required)
     compiler:   mspgcc
     code:       Watchdog Timer interval interrupts.
+
+i2cBitExp4Leds
+    summary:    Uses a MCP23017 i2c bit expander to light 4 leds, changing interval at ~1
+    hw:         Launchpad + MCP23017 Expander + Leds + Resistors (Dependant on Leds)
+    compiler:   mspgcc
+    code:       i2c, example of time430.h
+
+i2cBitExpLcd
+    summary:    Using a MCP23017 i2c bit expander to interface with a ST7066 3.3 V LCD.
+    hw:         Launchpad + MCP23017 Expander + ST7066/HD44780 LCD
+    compiler:   mspgcc
+    code:       i2c
+

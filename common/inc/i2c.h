@@ -22,4 +22,5 @@ void i2cReceive(volatile char * data, const int numberOfBytes);
 
 void i2cPoll(const char address);
 
+extern unsigned int i2cNacks;
 #endif /*I2C_H_*/

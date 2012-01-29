@@ -46,8 +46,8 @@
 #define MCP23017_DEFVALB            0x07    /*DEFAULT COMPARE REGISTER FOR INTERRUPT-ON-CHANGE B*/
 #define MCP23017_INTCONA            0x08    /*INTERRUPT CONTROL REGISTER A*/
 #define MCP23017_INTCONB            0x09    /*INTERRUPT CONTROL REGISTER B*/
-#define MCP23017_IOCON              0x0A    /*CONFIGURATION REGISTER A*/
-#define MCP23017_IOCON              0x0B    /*CONFIGURATION REGISTER B*/
+#define MCP23017_IOCONA             0x0A    /*CONFIGURATION REGISTER A*/
+#define MCP23017_IOCONB             0x0B    /*CONFIGURATION REGISTER B*/
 #define MCP23017_GPPUA              0x0C    /*PULL-UP RESISTOR A*/
 #define MCP23017_GPPUB              0x0D    /*PULL-UP RESISTOR B*/
 #define MCP23017_INTFA              0x0E    /*INTERRUPT FLAG REGISTER A*/
@@ -59,6 +59,7 @@
 #define MCP23017_OLATA              0x14    /*OUTPUT LATCH REGISTER  A*/
 #define MCP23017_OLATB              0x15    /*OUTPUT LATCH REGISTER  B*/
 
+#define MCP23017_IOCON              MCP23017_IOCONA 
 /*Register addresses if BANK = 1 */
 #define MCP23017_IODIRA_BANK        0x00    /*I/O DIRECTION REGISTER A*/                            
 #define MCP23017_IODIRB_BANK        0x10    /*I/O DIRECTION REGISTER B*/
@@ -70,8 +71,8 @@
 #define MCP23017_DEFVALB_BANK       0x13    /*DEFAULT COMPARE REGISTER FOR INTERRUPT-ON-CHANGE B*/
 #define MCP23017_INTCONA_BANK       0x04    /*INTERRUPT CONTROL REGISTER A*/
 #define MCP23017_INTCONB_BANK       0x14    /*INTERRUPT CONTROL REGISTER B*/
-#define MCP23017_IOCON_BANK         0x05    /*CONFIGURATION REGISTER A*/
-#define MCP23017_IOCON_BANK         0x15    /*CONFIGURATION REGISTER B*/
+#define MCP23017_IOCONA_BANK        0x05    /*CONFIGURATION REGISTER A*/
+#define MCP23017_IOCONB_BANK        0x15    /*CONFIGURATION REGISTER B*/
 #define MCP23017_GPPUA_BANK         0x06    /*PULL-UP RESISTOR A*/
 #define MCP23017_GPPUB_BANK         0x16    /*PULL-UP RESISTOR B*/
 #define MCP23017_INTFA_BANK         0x07    /*INTERRUPT FLAG REGISTER A*/
@@ -83,13 +84,14 @@
 #define MCP23017_OLATA_BANK         0x0A    /*OUTPUT LATCH REGISTER A*/
 #define MCP23017_OLATB_BANK         0x1A    /*OUTPUT LATCH REGISTER B*/
 
+#define MCP23017_IOCON_BANK         MCP23017_IOCONA_BANK
 /* IOCON bits */
 #define MCP23017_INTPOL             0x20    /* This bit sets the polarity of the INT output pin.*/
 #define MCP23017_ODR                0x40    /* This bit configures the INT pin as an open-drain output.*/
 #define MCP23017_HAEN               0x80    /* Hardware Address Enable bit (MCP23S17 only).
                                             ** Address pins are always enabled on MCP23017.*/
 #define MCP23017_DISSLW             0x10    /* Slew Rate control bit for SDA output.*/
-#define MCP23017_SWQOP              0x20    /* Sequential Operation mode bit.*/
+#define MCP23017_SEQOP              0x20    /* Sequential Operation mode bit.*/
 #define MCP23017_MIRROR             0x40    /* INT Pins Mirror bit.*/
 #define MCP23017_BANK               0x80    /* Controls how the registers are addressed.*/
 

@@ -46,8 +46,8 @@
 #define MCP23S17_DEFVALB            0x07    /*DEFAULT COMPARE REGISTER FOR INTERRUPT-ON-CHANGE B*/
 #define MCP23S17_INTCONA            0x08    /*INTERRUPT CONTROL REGISTER A*/
 #define MCP23S17_INTCONB            0x09    /*INTERRUPT CONTROL REGISTER B*/
-#define MCP23S17_IOCON              0x0A    /*CONFIGURATION REGISTER A*/
-#define MCP23S17_IOCON              0x0B    /*CONFIGURATION REGISTER B*/
+#define MCP23S17_IOCONA             0x0A    /*CONFIGURATION REGISTER A*/
+#define MCP23S17_IOCONB             0x0B    /*CONFIGURATION REGISTER B*/
 #define MCP23S17_GPPUA              0x0C    /*PULL-UP RESISTOR A*/
 #define MCP23S17_GPPUB              0x0D    /*PULL-UP RESISTOR B*/
 #define MCP23S17_INTFA              0x0E    /*INTERRUPT FLAG REGISTER A*/
@@ -70,8 +70,8 @@
 #define MCP23S17_DEFVALB_BANK       0x13    /*DEFAULT COMPARE REGISTER FOR INTERRUPT-ON-CHANGE B*/
 #define MCP23S17_INTCONA_BANK       0x04    /*INTERRUPT CONTROL REGISTER A*/
 #define MCP23S17_INTCONB_BANK       0x14    /*INTERRUPT CONTROL REGISTER B*/
-#define MCP23S17_IOCON_BANK         0x05    /*CONFIGURATION REGISTER A*/
-#define MCP23S17_IOCON_BANK         0x15    /*CONFIGURATION REGISTER B*/
+#define MCP23S17_IOCONA_BANK        0x05    /*CONFIGURATION REGISTER A*/
+#define MCP23S17_IOCONB_BANK        0x15    /*CONFIGURATION REGISTER B*/
 #define MCP23S17_GPPUA_BANK         0x06    /*PULL-UP RESISTOR A*/
 #define MCP23S17_GPPUB_BANK         0x16    /*PULL-UP RESISTOR B*/
 #define MCP23S17_INTFA_BANK         0x07    /*INTERRUPT FLAG REGISTER A*/
@@ -88,7 +88,7 @@
 #define MCP23S17_ODR                0x40    /*This bit configures the INT pin as an open-drain output.*/
 #define MCP23S17_HAEN               0x80    /*Hardware Address Enable bit.*/
 #define MCP23S17_DISSLW             0x10    /*Slew Rate control bit for SDA output.*/
-#define MCP23S17_SWQOP              0x20    /*Sequential Operation mode bit.*/
+#define MCP23S17_SEQOP              0x20    /*Sequential Operation mode bit.*/
 #define MCP23S17_MIRROR             0x40    /*INT Pins Mirror bit.*/
 #define MCP23S17_BANK               0x80    /*Controls how the registers are addressed.*/
 
