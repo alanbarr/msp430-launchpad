@@ -7,7 +7,7 @@ all: clean $(OUTPUT)
 $(OUTPUT):
 	$(CC) $(CFLAGS) -mmcu=$(TARGET) -o $(OUTPUT) \
     main.c \
-    ../common/src/i2c.c ../common/src/i2cBitExpanderLcd.c ../common/lib/usefulFunctions.a\
+    ../common/src/i2c.c ../common/src/i2cBitExpanderLcd.c
 
 clean:
 	-rm $(OUTPUT)

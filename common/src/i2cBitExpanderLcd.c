@@ -1,18 +1,18 @@
 /* Author: Alan Barr 
-   Created: January 2012 */
-/* ST7066/HD44780
-** http://www.sparkfun.com/products/9053
+ * Created: January 2012 */
+/* This code is used to control a ST7066/HD44780 lcd via a MCP23017
+** bit expander. This is the display used: http://www.sparkfun.com/products/9053
 */
 
 #include "i2cBitExpanderLcd.h"
 
 /* Provides initialisation for both the bit expander and the LCD.
 ** Bit Expander pointer address incrementing disabled and LCD
-**      connected pins are changed to low outputs.
+**  connected pins are changed to low outputs.
 ** LCD initalisation routine is conducted, after which LCD is
-**      put into 4 bit mode, display and cursor enabled, 
-**      screen cleared and cursor moved to home, cursor moves
-**      right.
+**  put into 4 bit mode, display cleared and returned to, 
+**  home. The cursor is set to move right and the display 
+**  is finally turned on.
 */
 void i2cLcdInit(void)
 {   
@@ -90,15 +90,6 @@ void i2cLcdInstructionSendCommand(const char data)
     char transmitBuffer[2] = {LCD_PORT_ADDRESS_OUTPUT, (data & 0xF0) | 
                               ST7066_INSTRUCTION_WRITE };
     
-    /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
-    {
-        P1OUT ^= BIT0;
-        LCD_BUSY_WAIT();   
-    }
-
-    P1OUT &= ~BIT0;
-
     /*Clocking Upper Nibble*/
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
     i2cTransmit(transmitBuffer,2);
@@ -143,7 +134,7 @@ char i2cLcdReadBusyFlagAndAddress(void)
     char readData = 0;
     char returnData = 0;
     char transmitBuffer[2] = {LCD_PORT_ADDRESS_OUTPUT, ST7066_INSTRUCTION_READ};
-    return 0;
+    
     i2cLcdChangeExpanderPinsInput();
     
     /*Reading Upper Nibble*/
@@ -196,11 +187,6 @@ char i2cLcdReadBusyFlagAndAddress(void)
 void i2cLcdWriteDataToRam(const char data)
 {
     char transmitBuffer[2] = { LCD_PORT_ADDRESS_OUTPUT, (data & 0xF0) | ST7066_DATA_WRITE };
-    /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
-    {
-        LCD_BUSY_WAIT();
-    }
 
     /*Clocking Upper Nibble*/
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
@@ -242,12 +228,6 @@ char i2cLcdReadDataFromRam(void)
     char readData = 0;
     char returnData = 0;
 
-    /*Checking busy flag*/
-    while(i2cLcdReadBusyFlagAndAddress() & ST7066_BUSY_FLAG)
-    {
-        LCD_BUSY_WAIT();
-    }
-    
     i2cLcdChangeExpanderPinsInput();
 
     i2cSetupTx(LCD_BITEXPANDER_ADDR);
@@ -295,6 +275,7 @@ char i2cLcdReadDataFromRam(void)
     return readData;
 }
 
+
 /* Sets the LCD data Bit Expander Bits to input.
 ** Sets pins to low.*/
 void i2cLcdChangeExpanderPinsInput(void)
@@ -330,5 +311,4 @@ void i2cLcdPrint(const char const * string)
     }
 
 }
-
 

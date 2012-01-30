@@ -1,7 +1,6 @@
 /* Author: Alan Barr
 ** Created: January 2012
-
-This header file interacts with the LCD via an i2c bit expander. */
+*/
 
 #ifndef I2C_BIT_EXP_LCD_H_
 #define I2C_BIT_EXP_LCD_H_
@@ -11,7 +10,6 @@ This header file interacts with the LCD via an i2c bit expander. */
 #include "i2c.h"                
 #include "MCP23017.h"           /* i2c Expander Header */
 #include "ST7066_HD44780.h"     /* LCD Header */
-#include "usefulFunctions.h"
 #include "time430.h"
 
 void i2cLcdInit(void);
@@ -35,7 +33,6 @@ void i2cLcdPrint(const char const * string);
 #define LCD_DATA_WAIT()                     TIME430_DELAY_US(250U)
 #define LCD_COMMAND_WAIT()                  TIME430_DELAY_US(5U)
 
-
 #define LCD_RS                              0x01        
 #define LCD_RW                              0x02        
 #define LCD_E                               0x04        
@@ -44,12 +41,9 @@ void i2cLcdPrint(const char const * string);
 #define LCD_DB6                             0x40        
 #define LCD_DB7                             0x80        
 
-
-/* Bit Configs */
-/* LCD Pins Low, set to zero for bit exp. All else high */
 #define LCD_PINS_OUTPUT                     (0xFF & ~(LCD_RS | LCD_RW | LCD_E |\
-                                            LCD_DB4 | LCD_DB5 | LCD_DB6 | LCD_DB7))
-/* LCD data pins changed to input */
+                                             LCD_DB4 | LCD_DB5 | LCD_DB6 | LCD_DB7))
+
 #define LCD_PINS_INPUT                      (0xFF & ~(LCD_RS | LCD_RW | LCD_E))
 
 /*Macros for commands. The permanent bits for each command are fixed.*/
