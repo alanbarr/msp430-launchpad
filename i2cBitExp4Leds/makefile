@@ -1,6 +1,6 @@
 CC=msp430-gcc
 
-CFLAGS=-Wall -Os -g -I ../common/inc
+CFLAGS=-Wall -Os -g -I ../common/inc -I ../common/inc/devices
 TARGET=msp430g2553
 OUTPUT=expander4Leds.elf
 

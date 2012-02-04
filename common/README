@@ -1,19 +1,38 @@
-Common contains some useful functions which may be useful in other projects.
+Common contains various.
 
 usefulFunctions
     Run "make usefulFunctions" from common to create the library in common/lib. 
-    All source is contained in common/src/usefulFunctions. Many of them are what
-    you would expect to find in libc so you may well prefer to use that.
+    All source is contained in common/src/usefulFunctions. Many of the functions
+    are similar to what you would find in libc.
 
 uart
-    The uart code is based on TI's example code, but modified for my needs - mainly
-    to make it a standalone module.
+    The uart code is based on TI's example code, but modified to make in a 
+    standalone module.
     The uart is bit-banged from TimerA.
     uart uses TimerA0 - 1.1 TX 1.2 RX
     uart1 uses TimerA1 - 2.0 TX 2.1 RX
     TimerA1 is the second TimerA found in certain mcus such as msp430g2553.
 
 i2c
-    Needs to be tidied before being pushed.
+    The i2c code is based on TI's example code, but has been modified into a
+    standalone module. (It still needs somework.)
+    1.6 is SCL
+    1.7 is SDA
+  
+LCD
+    The LCD code allows interaction with a ST7066 / HD4470 LCD. In LCD.h the 
+    pins being used are defined. The only stipulation is that the Data pins
+    (DB4-DB7) are on the same port on the mcu and the Command pins (RS,RW and 
+    E) are on the same port. The LCD is configured in 4 bit mode. If you do not
+    with to read data you can remove this from the compilation by changing the 
+    definition of LCD_READING_FUNCTIONALITY to 0. Also you can tie RW to ground
+    to only use 6 pins.
 
+i2cBitExpanderLcd
+    This module allows interaction with a ST7066 / HD4470 LCD via a MCP23017
+    i2c bit expander. It interacts with the LCD in 4 bit mode.
+
+inc/devices
+    These are header files for various devices.
+    
 

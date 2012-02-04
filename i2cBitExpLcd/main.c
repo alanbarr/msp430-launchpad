@@ -1,5 +1,7 @@
 /* Author: Alan Barr 
-** Created: Jan 2012 */
+** Created: Jan 2012
+** Compiler: mspgcc
+*/
 #include "msp430g2553.h"
 #include "i2cBitExpanderLcd.h"
 #include "time430.h"

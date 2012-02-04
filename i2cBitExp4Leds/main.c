@@ -1,5 +1,10 @@
-#define                 TIME430_CLOCK_FREQ 1
-#define BITEXPANDER     MCP23017_ADDRESS
+/* Author: Alan Barr 
+** Created: Jan 2012 
+** Compiler: mspgcc
+*/
+
+#define TIME430_CLOCK_FREQ  1
+#define BITEXPANDER         MCP23017_ADDRESS
 
 #include "MCP23017.h"
 #include "i2c.h"

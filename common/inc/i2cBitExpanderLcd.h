@@ -31,7 +31,7 @@ void i2cLcdPrint(const char const * string);
 #define LCD_BUSY_WAIT()                     TIME430_DELAY_MS(10U)
 #define LCD_E_WAIT()                        TIME430_DELAY_US(1U)
 #define LCD_DATA_WAIT()                     TIME430_DELAY_US(250U)
-#define LCD_COMMAND_WAIT()                  TIME430_DELAY_US(5U)
+#define LCD_COMMAND_WAIT()                  TIME430_DELAY_MS(5U)
 
 #define LCD_RS                              0x01        
 #define LCD_RW                              0x02        

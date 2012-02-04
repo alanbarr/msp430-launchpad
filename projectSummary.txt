@@ -35,5 +35,11 @@ i2cBitExpLcd
     summary:    Using a MCP23017 i2c bit expander to interface with a ST7066 3.3 V LCD.
     hw:         Launchpad + MCP23017 Expander + ST7066/HD44780 LCD
     compiler:   mspgcc
-    code:       i2c
+    code:       Uses commands from i2cBitExpLcd[.c/.h] in common.
+
+lcd
+    summary:    Interfacing with a ST7066 3.3 V LCD.
+    hw:         Launchpad + ST7066/HD44780 LCD
+    compiler:   mspgcc
+    code:       Uses commands from lcd[.c/.h] in common.
 
