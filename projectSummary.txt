@@ -19,9 +19,9 @@ ldrAndBiColourLed
     compiler:   mspgcc
     code:       Port interrupts, Timer A PWM, ADC
 
-wdtClock 
-    summary:    Fundamentals of a clock with a resolution of seconds.
-    hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required)
+wdtLcdClock 
+    summary:    Fundamentals of a clock with a resolution of seconds. Updates uptime to ST7066 lcd. 
+    hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required) + LCD 
     compiler:   mspgcc
     code:       Watchdog Timer interval interrupts.
 
@@ -43,3 +43,9 @@ lcd
     compiler:   mspgcc
     code:       Uses commands from lcd[.c/.h] in common.
 
+
+lcdClock
+    summary:    Displays uptime on a ST7066 LCD
+    hw:         Launchpad +watch crystal + ST7066/HD44780 LCD
+    compiler:   mspgcc
+    code:       Using TimerA with a watch crystal. Using lcd code from common.

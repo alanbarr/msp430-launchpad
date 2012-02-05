@@ -38,8 +38,8 @@ void lcdPrint(const char const * string);
 char lcdReadBusyFlagAndAddress(void);
 char lcdReadDataFromRam(void);
 
-#define LCD_STARTUP_WAIT()                  TIME430_DELAY_MS(100U);\
-                                            TIME430_DELAY_MS(100U);
+#define LCD_STARTUP_WAIT()                  TIME430_DELAY_MS(100UL);\
+                                            TIME430_DELAY_MS(100UL);
 
 #define LCD_BUSY_WAIT()                     TIME430_DELAY_MS(1UL)
 #define LCD_E_WAIT()                        TIME430_DELAY_US(1UL)
