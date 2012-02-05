@@ -1,11 +1,11 @@
-/* Built with mspgcc */
 /*******************************************************************************
 * MSP430F20xx Demo - LFXT1 Oscillator Fault Detection
+* compiler: mspgcc
 *
 * Description: System runs normally in LPM3 with WDT timer clocked by
-* 32kHz ACLK with a 1x4 second interrupt. P1.0 is normally pulsed every
+* 32kHz ACLK with a 1x4 second interrupt. P1.6 is normally pulsed every
 * second inside WDT interrupt. If an LFXT1 oscillator fault occurs,
-* NMI is requested forcing exit from LPM3. P1.0 is toggled rapidly by software
+* NMI is requested forcing exit from LPM3. P1.6 is toggled rapidly by software
 * as long as LFXT1 oscillator fault is present. Assumed only LFXT1 as NMI
 * source - code does not check for other NMI sources.
 * ACLK = LFXT1 = 32768, MCLK = SMCLK = Default DCO
@@ -24,7 +24,6 @@
 *        |               |
 *        |           P1.6|-->LED
 *
-* *Copyright (C)*
 * M. Buccini / L. Westlund
 * Texas Instruments Inc.
 * September 2005
