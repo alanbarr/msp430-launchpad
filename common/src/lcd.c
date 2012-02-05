@@ -13,6 +13,7 @@
 
 static void lcdSetUpperNibble(const char data);
 static void lcdSetLowerNibble(const char data);
+static void clock(void);
 
 #if LCD_READING_FUNCTIONALITY
 static char lcdReadUpperNibble(void);
@@ -30,21 +31,21 @@ void lcdInit(void)
     /*Set startup sequence to ensure correct initalisation of lcd*/
     /*First*/
     lcdSetUpperNibble(ST7066_START_UP_COMMAND);
-    LCD_CLOCK_E();
+    clock();
     TIME430_DELAY_MS(5UL);
     /*Second*/
     lcdSetUpperNibble(ST7066_START_UP_COMMAND);
-    LCD_CLOCK_E();
+    clock();
     TIME430_DELAY_US(200UL);
     /*Third*/
     lcdSetUpperNibble(ST7066_START_UP_COMMAND);
-    LCD_CLOCK_E();
+    clock();
     TIME430_DELAY_US(200UL);
 
     /*Set display to 4 bit mode*/
     LCD_SET_PINS_INSTRUCTION_WRITE();
     lcdSetUpperNibble(ST7066_FUNCTION_SET_BITS | ST7066_BIT_MODE_4);
-    LCD_CLOCK_E();
+    clock();
     LCD_COMMAND_WAIT();
 
     /*Set up LCD now that it is in 4 bit mode*/
@@ -76,14 +77,14 @@ void lcdWriteInstruction(const char command)
 
     /*Clock Upper Nibble*/
     lcdSetUpperNibble(command);
-    LCD_CLOCK_E();
+    clock();
     /*Clocked Upper Nibble */
 
     LCD_COMMAND_WAIT();
 
     /*Clock Lower Nibble*/
     lcdSetLowerNibble(command);
-    LCD_CLOCK_E();
+    clock();
     /*Clocked Lower Nibble */
 
     LCD_COMMAND_WAIT();
@@ -95,15 +96,16 @@ void lcdWriteDataToRam(const char data)
     /*Setup - somewhat of a sanity setup*/
     LCD_SET_PINS_OUTPUT();
     LCD_SET_PINS_DATA_WRITE();
+
     /*Clocking Upper Nibble*/
     lcdSetUpperNibble(data);
-    LCD_CLOCK_E();
+    clock();
     LCD_DATA_WAIT();
     /*Upper Nibble Clocked*/
 
     /*Clocking Lower Nibble */
     lcdSetLowerNibble(data);
-    LCD_CLOCK_E();
+    clock();
     LCD_DATA_WAIT();
     /*Lower Nibble Clocked*/
 }
@@ -220,6 +222,14 @@ static char lcdReadLowerNibble(void)
     }
 
     return data;
+}
+
+static void clock(void)
+{
+    LCD_SET_E_HIGH(); 
+    LCD_E_WAIT();
+    LCD_SET_E_LOW();
+    LCD_E_WAIT();
 }
 
 /*TODO*/

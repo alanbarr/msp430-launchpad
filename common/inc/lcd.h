@@ -34,7 +34,6 @@ void lcdInit(void);
 void lcdWriteInstruction(const char data);
 void lcdWriteDataToRam(const char data);
 void lcdPrint(const char const * string);
-
 /* The below require LCD_READING_FUNCTIONALITY to be true*/
 char lcdReadBusyFlagAndAddress(void);
 char lcdReadDataFromRam(void);
@@ -66,7 +65,6 @@ char lcdReadDataFromRam(void);
 #define LCD_SET_PINS_LOW()                  (LCD_DATA_PINS_PORT_OUT    &= ~LCD_DATA_PINS);\
                                             (LCD_COMMAND_PINS_PORT_OUT &= ~LCD_COMMAND_PINS);
 
-#define LCD_CLOCK_E()                       LCD_SET_E_HIGH(); LCD_E_WAIT(); LCD_SET_E_LOW(); LCD_E_WAIT();
 /*Set command pins to correct state*/
 #define LCD_SET_PINS_INSTRUCTION_WRITE()    LCD_COMMAND_PINS_PORT_OUT &= ~(LCD_RS | LCD_RW);
 
