@@ -1,8 +1,6 @@
 /* Author: Alan Barr 
  * Created: January 2012 */
 
-#include "lcd.h"
-
 /* Provides initialisation for the LCD.
 ** LCD connected pins are changed to low outputs.
 ** LCD initalisation routine is conducted, after which LCD is
@@ -10,6 +8,8 @@
 **  home. The cursor is set to move right and the display 
 **  is finally turned on.
 */
+
+#include "lcd.h"
 
 static void lcdSetUpperNibble(const char data);
 static void lcdSetLowerNibble(const char data);
@@ -56,6 +56,7 @@ void lcdInit(void)
     LCD_DISPLAY_ON_OFF(ST7066_DISPLAY_ON);
 }
 
+/*Writes a null terminated string to the lcd.*/
 void lcdPrint(const char const * string)
 {
     int index = 0;
@@ -68,7 +69,7 @@ void lcdPrint(const char const * string)
 }
 
 /* Writes Instructions to the LCD i.e. RS and RW are low. 
-** The argument is the command as per data sheet. */
+ * The argument is the command as per data sheet. */
 void lcdWriteInstruction(const char command)
 {
     /*Setup - somewhat of a sanity setup*/

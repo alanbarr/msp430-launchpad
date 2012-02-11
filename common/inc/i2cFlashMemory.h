@@ -7,7 +7,9 @@
 #define I2C_FLASH_MEMORY_H_
 
 #include "i2c.h"
-#include <string.h>
+#include "string.h"
+
+#define FLASH 0x50
 
 void i2cFMWrite(const char * data, const char i2cAddress, const unsigned int internalAddress, 
                 int numberOfBytes);

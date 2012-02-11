@@ -2,18 +2,17 @@
 * Copyright (C)
 * Originally by: D. Dang, Texas Instruments Inc. December 2010
 * Modified by: Alan Barr 2011
+* Compiler: mspgcc
 */
 
 #include "i2c.h"
 
-static char i2cPolling=0;                                               //Polling i2c 
-static int i2cRXByteCtr=0;
-static char const *pI2cTxData;                                          // Pointer to TX data
-static char *pI2cRxData;                                                // Pointer to i2cRX data
-static char i2cTXByteCtr;
+static char i2cPolling = 0;                                             //Polling i2c 
+static int i2cRXByteCtr = 0;
+static const char * pI2cTxData;                                         // Pointer to TX data
+static volatile char * pI2cRxData;                                      // Pointer to i2cRX data
+static char i2cTXByteCtr = 0;
 static char i2cRX = 0;
-unsigned int i2cNacks = 0;
-int i2cNoi =0;
 
 void i2cSetupPins(void)
 {
@@ -65,7 +64,7 @@ void i2cTransmit(const char * data, const int numberOfBytes)
 
 void i2cReceive(volatile char * data, const int numberOfBytes)
 {
-    pI2cRxData = (char *)data;                                          // Start of i2cRX buffer
+    pI2cRxData = data;                                                  // Start of i2cRX buffer
     i2cRXByteCtr = numberOfBytes;                                       // Load i2cRX byte counter
     while (UCB0CTL1 & UCTXSTP);                                         // Ensure stop condition got sent
     UCB0CTL1 |= UCTXSTT;                                                // I2C start condition
@@ -93,7 +92,6 @@ interrupt(USCIAB0RX_VECTOR) USCIAB0RX_ISR(void)
 {   
     if ((UCB0STAT & UCNACKIFG) == UCNACKIFG && i2cPolling == 1)
     {
-        i2cNacks++;
         UCB0STAT &= ~UCNACKIFG;
         UCB0CTL1 |= UCTXSTP;
         while(UCB0CTL1 & UCTXSTP);
@@ -115,7 +113,6 @@ interrupt(USCIAB0TX_VECTOR) USCIAB0TX_ISR(void)
 {
     if(i2cRX == 1)                                                          // Master Recieve?
     {
-        i2cNoi++;
         i2cRXByteCtr--;                                                     // Decrement i2cRX byte counter
         if (i2cRXByteCtr > 0)
         {
@@ -148,6 +145,5 @@ interrupt(USCIAB0TX_VECTOR) USCIAB0TX_ISR(void)
     }
 
 }
-
 
     

@@ -5,8 +5,7 @@ OUTPUT=lcd.elf
 all: clean $(OUTPUT)
 
 $(OUTPUT):
-	$(CC) $(CFLAGS) -mmcu=$(TARGET) -o $(OUTPUT) \
-    main.c ../common/src/lcd.c
+	$(CC) $(CFLAGS) -mmcu=$(TARGET) -o $(OUTPUT) main.c ../common/src/lcd.c
 
 clean:
 	-rm $(OUTPUT)

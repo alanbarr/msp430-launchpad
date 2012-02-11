@@ -5,12 +5,15 @@
 #ifndef LCD_H_
 #define LCD_H_
 
+#define TIME430_CLOCK_FREQ                  1       /*The frequency at which the mcu will run*/
+
+#define LCD_READING_FUNCTIONALITY           1       /*Set to zero to remove reading functions from binary*/
+
 #include "msp430.h"
 #include "ST7066_HD44780.h"     /* LCD Header */
+#include "time430.h"
 
 /*Below are the defines that can be changed*/
-#define TIME430_CLOCK_FREQ                  1       /*Clock frequency from time430.h*/
-#define LCD_READING_FUNCTIONALITY           1       /*Set to zero to remove reading functions from binary*/
 
 #define LCD_DATA_PINS_PORT_DIR              P2DIR
 #define LCD_DATA_PINS_PORT_OUT              P2OUT
@@ -38,8 +41,10 @@ void lcdPrint(const char const * string);
 char lcdReadBusyFlagAndAddress(void);
 char lcdReadDataFromRam(void);
 
-#define LCD_STARTUP_WAIT()                  TIME430_DELAY_MS(100UL);\
-                                            TIME430_DELAY_MS(100UL);
+#define LCD_STARTUP_WAIT()                  LCD_HALF_STARTUP_WAIT();
+
+/*Will need broken into smaller Delays for higher frequencies - increases bin size*/
+#define LCD_HALF_STARTUP_WAIT()             TIME430_DELAY_MS(100UL); TIME430_DELAY_MS(100UL);   
 
 #define LCD_BUSY_WAIT()                     TIME430_DELAY_MS(1UL)
 #define LCD_E_WAIT()                        TIME430_DELAY_US(1UL)
