@@ -5,7 +5,9 @@
  * This header file is used to try and provide basic time configuration
  * for the launchpad. Define TIME430_CLOCK_FREQ in your project before including
  * this header file will use this preprocessor to give you the appropriate
- * DCO setup as well correct millisecond and microsecond delays.
+ * DCO setup as well correct millisecond and microsecond delays. It may be 
+ * more convenient to define this in the makefile if there are multiple source
+ * files.
  * The correct defines for TIME430_CLOCK_FREQ are:
  * 1,8,12 and 16. These correspond to the desired cpu speed in Mhz.
 */

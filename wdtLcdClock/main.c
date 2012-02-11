@@ -6,7 +6,6 @@
 ** A basic clock functionality using WDT and an LCD display.
 ** Using a 6 pF C-001R crystal for ACLK.
 */
-#define TIME430_CLOCK_FREQ 1
 #include "msp430g2553.h"
 #include "legacymsp430.h"
 #include "lcd.h"

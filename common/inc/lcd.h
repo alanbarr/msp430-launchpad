@@ -5,8 +5,6 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#define TIME430_CLOCK_FREQ                  1       /*The frequency at which the mcu will run*/
-
 #define LCD_READING_FUNCTIONALITY           1       /*Set to zero to remove reading functions from binary*/
 
 #include "msp430.h"
