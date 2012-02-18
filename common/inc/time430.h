@@ -33,15 +33,18 @@
         #define TIME430_CLOCK_HZ            (TIME430_CLOCK_FREQ * 1000000UL)
 
         /* Use the below to configure the DCO*/
-        #define TIME430_CALIBRATE_CLOCK()   CONVERT_FREQ_TO_STRING(TIME430_CLOCK_FREQ)
+        #define TIME430_CALIBRATE_CLOCK() \
+                                    CONVERT_FREQ_TO_STRING(TIME430_CLOCK_FREQ)
 
-        /* The below macros will give you the correct delay depending on the configured clock.
-         * The largest value which __delay_cycles can take (mspgcc ver. 20110612) is 106609*/
-        #define TIME430_DELAY_US(x)         __delay_cycles((x) * TIME430_US_CYCLES)
-        #define TIME430_DELAY_MS(x)         __delay_cycles((x) * TIME430_MS_CYCLES)
+        /* The below macros will give you the correct delay depending on the 
+         * configured clock. The largest value which __delay_cycles can take
+         * (mspgcc ver. 20110612) is 106609*/
+        #define TIME430_DELAY_US(x)     __delay_cycles((x) * TIME430_US_CYCLES)
+        #define TIME430_DELAY_MS(x)     __delay_cycles((x) * TIME430_MS_CYCLES)
 
     #else
-        #error "TIME430_CLOCK_FREQ was not 1,2,8 or 16. Please ensure it is defined correctly"
+        #error TIME430_CLOCK_FREQ was not 1,2,8 or 16.\
+                Please ensure it is defined correctly
     #endif 
 
 #else

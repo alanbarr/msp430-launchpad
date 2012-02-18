@@ -45,12 +45,12 @@ int main(void)
     /*Configure Timer A*/
     TA0CCR0 = 0x7FFF;                               // Watch crystal frequency - 1 second interrupt
     TA0CCTL0 = CCIE;
-    TA0CTL  = TASSEL_1 | MC_1 | ID_0 ;              // ACLK, Up to TACCR0, Div 0, interrupt
+    TA0CTL  = TASSEL_1 | MC_1 | ID_0 ;              // ACLK, Up to TACCR0, Div 0
 
     /*Setup leds*/
     P1OUT = 0x00;
     P2OUT = 0x00;
-    P1DIR = SEC_LED + MIN_LED;                      // Set Leds to outputs
+    P1DIR = SEC_LED | MIN_LED;                      // Set Leds to outputs
 
     lcdInit();
 
