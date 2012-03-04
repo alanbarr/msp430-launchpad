@@ -21,6 +21,8 @@ static void commandParser(char * stringToParse, tCommandStruct * commandStructPt
 
 int main(void)
 {
+    volatile char uartRxBuffer[UARTBUFSIZE];
+
     WDTCTL = WDTPW + WDTHOLD;               // Stop WDT
   
     BCSCTL1 = CALBC1_1MHZ;                  // 1MHZ
@@ -30,7 +32,7 @@ int main(void)
     P1OUT = LED1 + LED2;
 	
     uartSetupPins();       
-	uartInit();
+	uartInit(uartRxBuffer, UARTBUFSIZE);
 
 	memClear((char *)uartRxBuffer, UARTBUFSIZE);
 	PRINT("Cli Started.\n\r");

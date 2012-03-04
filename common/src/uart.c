@@ -5,9 +5,12 @@
 */
 #include "uart.h"
 static int uartTxData;                                          // UART internal variable for TX
-volatile char uartRxBuffer[UARTBUFSIZE];                        // Buffer to save rx chars
-volatile unsigned int uartRxBufferIndex = 0;                    // Index to uartRxBuffer
 
+volatile static unsigned char gUartBufSize = 0;
+volatile static volatile char * gUartRxBuffer = 0;
+volatile unsigned int uartRxBufferIndex = 0;                    // External, zero elsewhere
+
+/* Configure pins for duplex UART */
 void uartSetupPins(void)
 {   
     P1OUT &= ~(UART_TXD + UART_RXD);                            
@@ -16,17 +19,19 @@ void uartSetupPins(void)
     P1DIR &= ~UART_RXD;                                         // Set all pins but RXD to output
 }
 
-//------------------------------------------------------------------------------
-// Function configures Timer_A for full-duplex UART operation
-//------------------------------------------------------------------------------
-void uartInit(void)
+
+/* Configure Timer A for duplex UART */
+void uartInit(volatile char * pBuffer, volatile unsigned char sizeOfBuffer)
 {
     __enable_interrupt();
     TACCTL0 = OUT;                                              // Set TXD Idle as Mark = '1'
     TACCTL1 = SCS + CM1 + CAP + CCIE;                           // Sync, Neg Edge, Capture, Int
     TACTL = TASSEL_2 + MC_2;                                    // SMCLK, start in continuous mode
+    gUartRxBuffer = pBuffer;
+    gUartBufSize = sizeOfBuffer;
 }
 
+/* Disable Timer A for duplex UART */
 void uartDisable(void)
 {
     __disable_interrupt();
@@ -36,14 +41,12 @@ void uartDisable(void)
 }
 
 
-//------------------------------------------------------------------------------
-// Timer_A UART - Receive Interrupt Handler
-//------------------------------------------------------------------------------
+/* Receive interrupt handler */
 interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
 {
     static unsigned char rxBitCnt = 8;
-    static unsigned char rxData = 0;                            //Seems to need to be unsigned with gcc
-    
+    static unsigned char rxData = 0;                            // Seems to need to be unsigned 
+
     if (TA0IV & TA0IV_TACCR1)                                   
     {
         TACCR1 += UART_TBIT;                                    // Add Offset to CCRx
@@ -52,6 +55,7 @@ interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
             TACCTL1 &= ~CAP;                                    // Switch capture to compare mode
             TACCR1 += UART_TBIT_DIV_2;                          // Point CCRx to middle of D0
         }
+
         else 
         {
             rxData >>= 1;
@@ -62,10 +66,9 @@ interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
             rxBitCnt--;
             if (rxBitCnt == 0)                                  // All bits RXed?
             {
-                uartRxBuffer[uartRxBufferIndex] = rxData;       // Store in global variable
-                
-                if (uartRxBufferIndex < UARTBUFSIZE)            // If at end of buffer overwrite last char
+                if (uartRxBufferIndex < gUartBufSize)           // If at end of buffer overwrite last char
                 {
+                    gUartRxBuffer[uartRxBufferIndex] = rxData;  // Store in global variable
                     uartRxBufferIndex++;
                 }
 
@@ -77,14 +80,10 @@ interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
     }
 
 }
-//------------------------------------------------------------------------------
 
 
-
-//------------------------------------------------------------------------------
-// Outputs one byte using the Timer_A UART
-//------------------------------------------------------------------------------
-void uartTx(char byte)
+/* Print one byte over UART */
+void uartTx(const char byte)
 {
     while (TACCTL0 & CCIE);                                     // Ensure last char got TX'd
     TACCR0 = TAR;                                               // Current state of TA counter
@@ -93,12 +92,11 @@ void uartTx(char byte)
     uartTxData = byte;                                          // Load global variable
     uartTxData |= 0x100;                                        // Add mark stop bit to TXData
     uartTxData <<= 1;                                           // Add space start bit
+    _BIS_SR(LPM0_bits);                                         // Enter LMP0 for duration
 }
 
-//------------------------------------------------------------------------------
-// Prints a string over using the Timer_A UART
-//------------------------------------------------------------------------------
-void uartPrint(char *string)
+/* Print a NULL terminated string over UART */
+void uartPrint(const char * string)
 {
     while (*string) 
     {
@@ -106,9 +104,7 @@ void uartPrint(char *string)
     }
 }
 
-//------------------------------------------------------------------------------
-// Timer_A UART - Transmit Interrupt Handler
-//------------------------------------------------------------------------------
+/* Transmit interrupt handler */
 interrupt(TIMER0_A0_VECTOR) Timer0_A0_ISR(void)
 {
     static char txBitCnt = 10;
@@ -118,7 +114,9 @@ interrupt(TIMER0_A0_VECTOR) Timer0_A0_ISR(void)
     {    
         TACCTL0 &= ~CCIE;                                       // All bits TXed, disable interrupt
         txBitCnt = 10;                                          // Re-load bit counter
+        _BIC_SR_IRQ(LPM0_bits);                                 // Clear LPM0 bits
     }
+
     else 
     {
         if (uartTxData & 0x01) 
