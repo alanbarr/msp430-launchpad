@@ -38,6 +38,17 @@ const unsigned int sonyTvIrCommand[] = { COMMAND_LIST };
 #define COMMAND_NAME_CODE(NAME, CODE) NAME,
 enum { COMMAND_LIST };
 
+/********************************* Parser GLOBALS *********************************/
+#define NUMBER_OF_COMMANDS 7
+const commandPair commands[NUMBER_OF_COMMANDS] = {{'a', &(addNewReminder)},
+                                                  {'d', &(removeAnEntry)},
+                                                  {'r', &(readEntries)},
+                                                  {'t', &(transmitReceivedCommand)},
+                                                  {'s', &(timeSet)},
+                                                  {'b', &(block)},
+                                                  {'h', &(printHelp)}
+                                                 };
+
 /********************************* Functions **********************************/
 
 int main(void)
@@ -308,40 +319,15 @@ void parseUartBufferForInfo(const char * buffer, const int bufferLength)
 {
     int errorReturned = errorNotChanged;
     char errorReportString[] = "ERROR:0\r\n\0";
+    int functionIndex;
     
-    /* Adding a new entry */
-    if (buffer[IDENTIFIER_INDEX] == 'a')
+    errorReturned = errorUnrecognisedCommand;
+    for (functionIndex = 0; functionIndex < NUMBER_OF_COMMANDS; functionIndex++)
     {
-        errorReturned = addNewReminder(buffer, bufferLength);
-    }
-    
-    /* Removing an entry */
-    else if (buffer[IDENTIFIER_INDEX] == 'd')
-    {
-        errorReturned = removeAnEntry(buffer, bufferLength);
-    }
-    
-    /* Reading active reminder entries and the time. */
-    else if ( buffer[IDENTIFIER_INDEX] == 'r')
-    {
-        errorReturned = readEntries();
-    }
-    
-    /* Transmit a command */
-    else if (buffer[IDENTIFIER_INDEX] == 't')
-    {
-        errorReturned = transmitReceivedCommand(buffer, bufferLength);
-    }
-
-    /* Set the time */
-    else if (buffer[IDENTIFIER_INDEX] == 's')
-    {
-        errorReturned = timeSet(buffer, bufferLength);
-    }
-
-    else
-    {
-        errorReturned = errorUnrecognisedCommand;
+        if (buffer[IDENTIFIER_INDEX] == commands[functionIndex].identifier)
+        {
+            errorReturned = commands[functionIndex].bufferFunction(buffer, bufferLength);
+        }
     }
 
     errorReportString[6] = errorReturned + 0x30;
@@ -382,7 +368,8 @@ int addNewReminder(const char * buffer, const int bufferLength)
                 getTensFromStr(&buffer[DATE_INDEX],  &(pRem->date)) == success    &&
                 getTensFromStr(&buffer[MONTH_INDEX],  &(pRem->month)) == success)
             {
-                if ((errorReturn = getHundredsFromStr(&buffer[CHANNEL_INDEX], &(pRem->channel))) == success)
+                if ((errorReturn = getHundredsFromStr(&buffer[CHANNEL_INDEX], 
+                                                      &(pRem->channel))) == success)
                 {
                     strcpy(pRem->eventName, &buffer[NAME_INDEX]);
                     pRem->used = true;
@@ -422,7 +409,7 @@ int removeAnEntry(const char * buffer, const int bufferLength)
     
 /* Reads all active reminders and transmits them over UART.
  * Format IiHhMmDdMmCccEeeeeeNR0 = 20 chars. Replace NULL w/ newline chars = 22*/
-int readEntries(void)
+int readEntries(const char * buffer, const int bufferLength)
 {
     int errorReturn = errorNotChanged;
     tReminderStructure * pRem;
@@ -504,8 +491,8 @@ int getHundredsFromStr(const char * buffer,  unsigned char * destination)
 {
     int errorReturn = errorNotChanged;
     
-    if  (buffer[0] > '2' || (buffer[0] == '2' && buffer[1] > '5') ||
-         (buffer[0] == '2' && buffer[1] == '5' && buffer[2] > '5'))
+    if (buffer[0] > '2' || (buffer[0] == '2' && buffer[1] > '5') ||
+       (buffer[0] == '2' && buffer[1] == '5' && buffer[2] > '5'))
     {
         errorReturn = errorNumberTooLarge;
     }
@@ -593,6 +580,7 @@ int transmitReceivedCommand(const char * buffer, const int bufferLength)
 
     return errorReturn;
 }
+
 
 /* Function checks entries in reminder list against current time. If a reminder
  * event is scheduled, the appropriate channel is transmitted, and the event is
@@ -698,13 +686,52 @@ int timeSet(const char * buffer, const int bufferLength)
     return errorReturn;
 }
 
-
-void block(void)
+/* bS */
+/* Generates an always on carrier wave to stop other signals reaching the tv. */
+int block(const char * buffer, const int bufferLength)
 {
-    TA1CCR0  = CW_PERIOD_CYCLES;                        // ~25 uS            
-    TA1CCR1  = CW_HALF_PERIOD_CYCLES;                   // ~12.5 uS
-    TA1CTL   = TASSEL_2 | MC_1;                         // SMCLK, Up Mod,
-    P2DIR   |= IR_LED;                                  // IR led pin output
-    TA1CCTL1 = OUTMOD_7;                                // O/P Reset/Set
-    P2SEL   |= IR_LED;                                                    
+    int errorReturn = errorNotChanged;
+    
+    if (bufferLength != BUFFER_BLOCK_LEN)
+    {
+        errorReturn = errorBufferIncorrectLength;
+    }
+
+    else if (buffer[1] == '1')
+    {
+        TA1CCR0  = CW_PERIOD_CYCLES;                        // ~25 uS            
+        TA1CCR1  = CW_HALF_PERIOD_CYCLES;                   // ~12.5 uS
+        TA1CTL   = TASSEL_2 | MC_1;                         // SMCLK, Up Mod,
+        P2DIR   |= IR_LED;                                  // IR led pin output
+        TA1CCTL1 = OUTMOD_7;                                // O/P Reset/Set
+        P2SEL   |= IR_LED;    
+
+        errorReturn = success;
+    }
+
+    else
+    {
+        TA1CCR0  = 0x00;                         
+        TA1CCR1  = 0x00;                  
+        TA1CTL   = 0x00;
+        P2DIR   &= ~IR_LED;
+        TA1CCTL1 = 0x00;
+        P2SEL   &= ~IR_LED;    
+
+        errorReturn = success;
+    }
+
+    return errorReturn;
+}
+
+int printHelp(const char * buffer, const int bufferLength)
+{
+    uartPrint("a - add a new reminder.                 aHhMmDdMmCccNnnnnn\r\n");
+    uartPrint("b - blocks IR signals.                  bS\r\n");
+    uartPrint("d - deletes an entry by index.          dIi\r\n");
+    uartPrint("h - prints help.                        h\r\n");
+    uartPrint("r - reads entries.                      r\r\n");
+    uartPrint("s - sets the time.                      sHhMmSsDdMmYy\r\n");
+    uartPrint("t - transmits an IR command from array. tNn\r\n");
+    return success;
 }

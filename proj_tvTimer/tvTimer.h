@@ -84,26 +84,28 @@
 #define TX_MONTH_INDEX              (TX_DATE_INDEX    + 2)
 #define TX_CHANNEL_INDEX            (TX_MONTH_INDEX   + 2)
 #define TX_NAME_INDEX               (TX_CHANNEL_INDEX + 3)
-
-#define EVENT_NAME_LEN              7       /* Includes NULL */
+        
+#define BUFFER_BLOCK_LEN            4        
+#define EVENT_NAME_LEN              7
 #define BUFFER_TIME_SET_LEN         15
-#define MINIMUM_REMINDER_LEN        13      /* Null Term, no event name */
+#define MINIMUM_REMINDER_LEN        13
 
 /********************************* Prototypes *********************************/
-
 void startTransmit(const unsigned int data);
 void parseUartBufferForInfo(const char * buffer, const int bufferLength);
 int timeSet(const char * buffer, const int bufferLength);
 int addNewReminder(const char * buffer, const int bufferLength);
 int removeAnEntry(const char * buffer, const int bufferLength);
-int readEntries(void);
+int readEntries(const char * buffer, const int bufferLength);
+int block(const char * buffer, const int bufferLength);
+int printHelp(const char * buffer, const int bufferlength);
 int getTensFromStr(const char * buffer,  unsigned char * destination);
 int getHundredsFromStr(const char * buffer,  unsigned char * destination);
 int transmitReceivedCommand(const char * buffer, const int bufferLength);
 void checkForEvent(void);
 int putTensToStr(const unsigned char number, char * destination);
 int putHundredsToStr(const unsigned char number, char * destination);
-void block(void);
+
 /********************************* Data Types *********************************/
 typedef enum { false = 0,
                true  = 1,
@@ -152,4 +154,8 @@ typedef enum { irEntry    = 0x01,
                irInactive = 0x40,
             } eIrTransmissionState;
 
+typedef struct { char identifier;
+                 int (*bufferFunction)(const char * buffer, const int bufferlength);
+               } commandPair;
+                     
 #endif /* _TV_TIMER_H_ */
