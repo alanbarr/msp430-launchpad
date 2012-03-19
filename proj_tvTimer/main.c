@@ -31,7 +31,7 @@ volatile unsigned int irTransmitData = 0;
 /* Using the preprocessor to create array of command values. */
 #undef COMMAND_NAME_CODE
 #define COMMAND_NAME_CODE(NAME, CODE) CODE,
-const unsigned int sonyTvIrCommand[] = { COMMAND_LIST  };
+const unsigned int sonyTvIrCommand[] = { COMMAND_LIST };
 
 /* Using the preprocessor to create enum of indexes to array. */
 #undef COMMAND_NAME_CODE
@@ -65,7 +65,7 @@ int main(void)
     uartSetupPins();
     uartInit(uartRxBuffer, BUFFERSIZE);
     uartPrint("Starting\n\r");
-
+    
     /* Main loop. Wakes from sleep each minute or when the uart has received a
      * character. The UART is checked to see if it contains a valid setting 
      * string. The event list is check against the current time. */
@@ -80,11 +80,9 @@ int main(void)
              * reception. */
             for (bufferIndex = 0; bufferIndex <= uartRxBufferIndex; bufferIndex++)
             {
-                P1OUT ^= BIT6;
                 if (uartRxBuffer[bufferIndex] == '\n' && 
                     uartRxBuffer[bufferIndex - 1] == '\r')
                 {
-                    P1OUT ^= BIT0;
                     /* Set the index to the buffer to the end. This is an unused
                      * character and any incoming data will overwrite this 
                      * value */
@@ -101,10 +99,12 @@ int main(void)
                      * command */
                     memset((char*)uartRxBuffer, 0, BUFFERSIZE);
                     uartRxBufferIndex = 0;
+                    uartPrint("\r\n");
                     break;
                 }
             }
-
+            
+            /* Filled the buffer, reset */
             if (uartRxBufferIndex == BUFFERSIZE - 1)
             {
                 uartRxBufferIndex = 0;
@@ -113,7 +113,8 @@ int main(void)
         }
 
         checkForEvent();
-        _BIS_SR(LPM0_bits); 
+
+        _BIS_SR(LPM0_bits | GIE); /* TODO */
     }
 
     return 0;
@@ -122,12 +123,13 @@ int main(void)
 
 /* Initiates a transmission of an IR code by configuring timer A correctly,
  * then entering low power mode until transmission finished. This is repeated
- * three times. */
+ * 10 times. A sleep is then entered to allow the transmitted command to be 
+ * processed by the TV. */
 void startTransmit(const unsigned int data)
 {
     int ctr;
 
-    for (ctr = 0; ctr < 3; ctr++)
+    for (ctr = 0; ctr < 10; ctr++)
     {
         gIrState = irEntry;
         gNumberOfInterruptsToStateChange = START_TX_INT_NUM;
@@ -140,6 +142,16 @@ void startTransmit(const unsigned int data)
         TA1CCTL0 = CCIE;                                    // Enable CC0 interrupt
         _BIS_SR(GIE | LPM0_bits);                           // Enter LPM for TX
     }
+    
+    /* We want a 1s wait between each command transmit. This is handled by
+     * configuring T1A to source the crystal and setting the gIrState to the
+     * appropriate state */
+    gIrState = ir1sTxWait;
+    gNumberOfInterruptsToStateChange = START_TX_INT_NUM;
+    TA1CCR0  = ACLK_1_SECOND_COUNT;                          
+    TA1CTL   = TASSEL_1 | MC_1;                         // SMCLK, Up Mod,
+    TA1CCTL0 = CCIE;                                    // Enable CC0 interrupt
+    _BIS_SR(GIE | LPM0_bits);                           // Enter LPM for TX
 }
 
 
@@ -204,7 +216,7 @@ interrupt(TIMER1_A0_VECTOR) TA1_0_ISR(void)
              * state which is a 45mS delay. This is handled in a TimerA count 
              * of 40,000 * the appropriate number of interrupts for clock 
              * freq.*/
-            if (gIrState != irClearing)
+            if (gIrState != irClearing && gIrState != ir1sTxWait)
             {
                 gIrState = irClearing;
                 TA1CCR0  = TIMER_VALUE_CLEARING;   
@@ -218,6 +230,7 @@ interrupt(TIMER1_A0_VECTOR) TA1_0_ISR(void)
              * Exit low power mode upon leaving ISR. */
             else
             {
+                gIrState = irInactive;
                 TA1CTL   = 0x00;                                        
                 TA1CCTL0 = 0x00;                                        
                 _BIC_SR_IRQ(LPM0_bits);          
@@ -232,10 +245,10 @@ interrupt(TIMER1_A0_VECTOR) TA1_0_ISR(void)
  * increased, we wake from sleep allowing programs to be checked. */
 interrupt(WDT_VECTOR) wdtInterrupt(void)
 {
-    P1OUT ^= BIT6;
     if (++gCurrentTime.seconds > 59)
     {
         gCurrentTime.seconds = 0;
+        _BIC_SR_IRQ(LPM0_bits);
         
         if (++gCurrentTime.minutes > 59) 
         {
@@ -271,7 +284,7 @@ interrupt(WDT_VECTOR) wdtInterrupt(void)
                         gCurrentTime.month = January;
 
                         /* Handles leap year boolean */
-                        if(++gCurrentTime.year % 4 == 0)
+                        if (++gCurrentTime.year % 4 == 0)
                         {
                             gCurrentTime.leapYear = true;
                         }
@@ -323,7 +336,7 @@ void parseUartBufferForInfo(const char * buffer, const int bufferLength)
     /* Set the time */
     else if (buffer[IDENTIFIER_INDEX] == 's')
     {
-        errorReturned = timeSet(buffer, bufferLength) != success;
+        errorReturned = timeSet(buffer, bufferLength);
     }
 
     else
@@ -391,6 +404,7 @@ int addNewReminder(const char * buffer, const int bufferLength)
     return errorReturn;
 }
 
+
 /* Parses the received uart string for the index to the reminder
  * to delete. */
 int removeAnEntry(const char * buffer, const int bufferLength)
@@ -416,13 +430,12 @@ int readEntries(void)
     int strIndex = 0;
     char stringToTx[BUFFERSIZE];
 
-    for(remIndex = 0; remIndex < REMINDER_LIST_SIZE; remIndex++)
+    for (remIndex = 0; remIndex < REMINDER_LIST_SIZE; remIndex++)
     {
         pRem = &gReminderList[remIndex];
 
         if (pRem->used == true)
         {
-            P1OUT ^= BIT0;
             putTensToStr(remIndex, &stringToTx[TX_LIST_INDEX]);
             putTensToStr(pRem->hour, &stringToTx[TX_HOUR_INDEX]);
             putTensToStr(pRem->minute, &stringToTx[TX_MIN_INDEX]);
@@ -498,13 +511,13 @@ int getHundredsFromStr(const char * buffer,  unsigned char * destination)
     }
     
     else if ((buffer[0] >= '0' && buffer[0] <= '9') &&
-            (buffer[1] >= '0' && buffer[1] <= '9') &&
-            (buffer[2] >= '0' && buffer[2] <= '9'))
+             (buffer[1] >= '0' && buffer[1] <= '9') &&
+             (buffer[2] >= '0' && buffer[2] <= '9'))
     {
         *destination  = (buffer[0] - 0x30) * 100;
         *destination += (buffer[1] - 0x30) * 10;
         *destination += buffer[2] - 0x30;
-        errorReturn = success;
+        errorReturn   = success;
     }
 
     else
@@ -571,12 +584,13 @@ int transmitReceivedCommand(const char * buffer, const int bufferLength)
         {
             startTransmit(sonyTvIrCommand[rxCommand]);
         }
+
         else
         {
             errorReturn = errorIndexOutOfRange;
         }
     }
-    
+
     return errorReturn;
 }
 
@@ -590,19 +604,19 @@ void checkForEvent(void)
     unsigned int secondChannelDigit = 0;
     unsigned int thirdChannelDigit = 0;
 
-    for(remIndex = 0; remIndex < REMINDER_LIST_SIZE; remIndex++)
+    for (remIndex = 0; remIndex < REMINDER_LIST_SIZE; remIndex++)
     {
         if (gReminderList[remIndex].used == true)
         {
-            if (gReminderList[remIndex].month == gCurrentTime.month     &&
-                gReminderList[remIndex].date == gCurrentTime.date       &&
-                gReminderList[remIndex].hour == gCurrentTime.hours      &&
+            if (gReminderList[remIndex].month  == gCurrentTime.month    &&
+                gReminderList[remIndex].date   == gCurrentTime.date     &&
+                gReminderList[remIndex].hour   == gCurrentTime.hours    &&
                 gReminderList[remIndex].minute == gCurrentTime.minutes)
             {
                 thirdChannelDigit = gReminderList[remIndex].channel % 10;
-                gReminderList[remIndex].channel / 10;
+                gReminderList[remIndex].channel /= 10;
                 secondChannelDigit = gReminderList[remIndex].channel % 10;
-                gReminderList[remIndex].channel / 10;
+                gReminderList[remIndex].channel /= 10;
                 firstChannelDigit = gReminderList[remIndex].channel % 10;
                 
                 if (firstChannelDigit)
@@ -616,7 +630,6 @@ void checkForEvent(void)
                 }
 
                 startTransmit(sonyTvIrCommand[thirdChannelDigit]);
-
                 gReminderList[remIndex].used = false;
                 break;
             }
@@ -634,7 +647,6 @@ int timeSet(const char * buffer, const int bufferLength)
     if (bufferLength != BUFFER_TIME_SET_LEN)
     {
         errorReturn = errorBufferIncorrectLength;
-        uartTx(bufferLength % 10 + 0x30);
     }
 
     else
@@ -653,12 +665,17 @@ int timeSet(const char * buffer, const int bufferLength)
 
         if (errorReturn == success)
         {
-            errorReturn = getTensFromStr(&buffer[7], &tempParsedTime.month);
+            errorReturn = getTensFromStr(&buffer[7], &tempParsedTime.date);
         }
 
         if (errorReturn == success)
         {
-            errorReturn = getTensFromStr(&buffer[9], &tempParsedTime.year);
+            errorReturn = getTensFromStr(&buffer[9], &tempParsedTime.month);
+        }
+
+        if (errorReturn == success)
+        {
+            errorReturn = getTensFromStr(&buffer[11], &tempParsedTime.year);
         }
 
         if (errorReturn == success)
@@ -689,5 +706,5 @@ void block(void)
     TA1CTL   = TASSEL_2 | MC_1;                         // SMCLK, Up Mod,
     P2DIR   |= IR_LED;                                  // IR led pin output
     TA1CCTL1 = OUTMOD_7;                                // O/P Reset/Set
-    P2SEL |= IR_LED;                                                    
+    P2SEL   |= IR_LED;                                                    
 }

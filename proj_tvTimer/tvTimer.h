@@ -18,6 +18,7 @@
 
 #define TIMER_VALUE_CLEARING        (0xFFFF)
 
+#define ACLK_1_SECOND_COUNT         (0x7FFF)
 /* Timings for transmission states */
 #define CLEARING_TIME_US            (45000)
 #define HEADER_STATE_TIME_US        (2400)
@@ -39,27 +40,27 @@
 
 /* These codes are in format: 4 Unused bits + Device + Command, 
  * i.e. BIT0 is LSB. The device is 1 i.e tv. */
-#define COMMAND_LIST \
-    COMMAND_NAME_CODE(ZERO,               0x0080) /* Command =  0 */ /*00*/\
-    COMMAND_NAME_CODE(ONE,                0x0081) /*         =  1 */ /*01*/\
-    COMMAND_NAME_CODE(TWO,                0x0082) /*         =  2 */ /*02*/\
-    COMMAND_NAME_CODE(THREE,              0x0083) /*         =  3 */ /*03*/\
-    COMMAND_NAME_CODE(FOUR,               0x0084) /*         =  4 */ /*04*/\
-    COMMAND_NAME_CODE(FIVE,               0x0085) /*         =  5 */ /*05*/\
-    COMMAND_NAME_CODE(SIX,                0x0086) /*         =  6 */ /*06*/\
-    COMMAND_NAME_CODE(SEVEN,              0x0087) /*         =  7 */ /*07*/\
-    COMMAND_NAME_CODE(EIGHT,              0x0088) /*         =  8 */ /*08*/\
-    COMMAND_NAME_CODE(NINE,               0x0089) /*         =  9 */ /*09*/\
-    COMMAND_NAME_CODE(CHANNEL_UP,         0x0090) /*         = 16 */ /*10*/\
-    COMMAND_NAME_CODE(CHANNEL_DOWN,       0x0091) /*         = 17 */ /*11*/\
-    COMMAND_NAME_CODE(VOLUME_UP,          0x0092) /*         = 18 */ /*12*/\
-    COMMAND_NAME_CODE(VOLUME_DOWN,        0x0093) /*         = 19 */ /*13*/\
-    COMMAND_NAME_CODE(COMMAND_MUTE,       0x0094) /*         = 20 */ /*14*/\
-    COMMAND_NAME_CODE(POWER,              0x0095) /*         = 21 */ /*15*/\
-    COMMAND_NAME_CODE(BRIGHT_UP,          0x009E) /*         = 30 */ /*16*/\
-    COMMAND_NAME_CODE(BRIGHT_DOWN,        0x009F) /*         = 31 */ /*17*/\
-    COMMAND_NAME_CODE(SPEAKERS_TOGGLE,    0x00C0) /*         = 80 */ /*18*/\
-    COMMAND_NAME_CODE(MAX_IR_COMMAND,     0x0000) /* Should always be last */
+#define COMMAND_LIST                            /*Command */  /* Index */\
+    COMMAND_NAME_CODE(ZERO,             0x0089) /*    0   */  /*  00   */\
+    COMMAND_NAME_CODE(ONE,              0x0080) /*    1   */  /*  01   */\
+    COMMAND_NAME_CODE(TWO,              0x0081) /*    2   */  /*  02   */\
+    COMMAND_NAME_CODE(THREE,            0x0082) /*    3   */  /*  03   */\
+    COMMAND_NAME_CODE(FOUR,             0x0083) /*    4   */  /*  04   */\
+    COMMAND_NAME_CODE(FIVE,             0x0084) /*    5   */  /*  05   */\
+    COMMAND_NAME_CODE(SIX,              0x0085) /*    6   */  /*  06   */\
+    COMMAND_NAME_CODE(SEVEN,            0x0086) /*    7   */  /*  07   */\
+    COMMAND_NAME_CODE(EIGHT,            0x0087) /*    8   */  /*  08   */\
+    COMMAND_NAME_CODE(NINE,             0x0088) /*    9   */  /*  09   */\
+    COMMAND_NAME_CODE(CHANNEL_UP,       0x0090) /*   16   */  /*  10   */\
+    COMMAND_NAME_CODE(CHANNEL_DOWN,     0x0091) /*   17   */  /*  11   */\
+    COMMAND_NAME_CODE(VOLUME_UP,        0x0092) /*   18   */  /*  12   */\
+    COMMAND_NAME_CODE(VOLUME_DOWN,      0x0093) /*   19   */  /*  13   */\
+    COMMAND_NAME_CODE(COMMAND_MUTE,     0x0094) /*   20   */  /*  14   */\
+    COMMAND_NAME_CODE(POWER,            0x0095) /*   21   */  /*  15   */\
+    COMMAND_NAME_CODE(BRIGHT_UP,        0x009E) /*   30   */  /*  16   */\
+    COMMAND_NAME_CODE(BRIGHT_DOWN,      0x009F) /*   31   */  /*  17   */\
+    COMMAND_NAME_CODE(SPEAKERS_TOGGLE,  0x00C0) /*   80   */  /*  18   */\
+    COMMAND_NAME_CODE(MAX_IR_COMMAND,   0x0000) /* Should always be last */
 
 #define DAYS_FEB_LEAP_YEAR          29
 
@@ -85,7 +86,7 @@
 #define TX_NAME_INDEX               (TX_CHANNEL_INDEX + 3)
 
 #define EVENT_NAME_LEN              7       /* Includes NULL */
-#define BUFFER_TIME_SET_LEN         14
+#define BUFFER_TIME_SET_LEN         15
 #define MINIMUM_REMINDER_LEN        13      /* Null Term, no event name */
 
 /********************************* Prototypes *********************************/
@@ -147,7 +148,8 @@ typedef enum { irEntry    = 0x01,
                irPause    = 0x04, 
                irActive   = 0x08,
                irClearing = 0x10,
-               irExit     = 0x20,
+               ir1sTxWait = 0x20,
+               irInactive = 0x40,
             } eIrTransmissionState;
 
 #endif /* _TV_TIMER_H_ */
