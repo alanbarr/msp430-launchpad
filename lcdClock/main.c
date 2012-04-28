@@ -8,7 +8,7 @@
 */
 #include "msp430g2553.h"
 #include "legacymsp430.h"
-#include "lcd.h"
+#include "lcd_st7066.h"
 #include "time430.h"
 
 /* Leds which toggle every second / minute. */

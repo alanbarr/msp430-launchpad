@@ -6,7 +6,7 @@ TARGET=msp430g2553
 all: clean wdtClock.elf
 
 wdtClock.elf: main.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -o $@ $< ../common/src/lcd.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -o $@ $< ../common/src/lcd_st7066.c
 
 clean:
 	-rm wdtClock.elf

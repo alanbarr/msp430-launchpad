@@ -3,7 +3,7 @@
 ** Compiler: mspgcc
 */
 #include "msp430g2553.h"
-#include "lcd.h"
+#include "lcd_st7066.h"
 int main(void)
 {
     char readChar = 0x00;

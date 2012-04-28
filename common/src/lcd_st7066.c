@@ -9,7 +9,7 @@
 **  is finally turned on.
 */
 
-#include "lcd.h"
+#include "lcd_st7066.h"
 
 static void lcdSetUpperNibble(const char data);
 static void lcdSetLowerNibble(const char data);

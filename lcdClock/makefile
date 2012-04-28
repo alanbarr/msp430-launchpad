@@ -7,7 +7,7 @@ TARGET=msp430g2553
 all: clean $(OUTPUT)
 
 $(OUTPUT): main.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -o $@ $< ../common/src/lcd.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -o $@ $< ../common/src/lcd_st7066.c
 
 clean:
 	-rm $(OUTPUT)
