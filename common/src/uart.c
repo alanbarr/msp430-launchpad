@@ -3,12 +3,32 @@
 * Originally by: D. Dang, Texas Instruments Inc. December 2010
 * Modified by: Alan Barr 2011
 */
-#include "uart.h"
-static int uartTxData;                                          // UART internal variable for TX
 
-volatile static unsigned char gUartBufSize = 0;
-volatile static volatile char * gUartRxBuffer = 0;
+/* Module provides basic bit-banged UART functionality.
+ *
+ * To use call uartInit() passing in a pointer to the memory to use for storing
+ * rx'ed bytes as well as the size of the buffer. Call uartSetupPins() to then
+ * configure the pins as required.
+ *
+ * After this tx'ing and rx'ing should be possible.
+ *
+ * The memory used to store received characters should be cleared as required,
+ * which is done externally to this module. Also uartRxBufferIndex should be set
+ * to 0 as appropriate, which is the index the next received character will be 
+ * placed.
+ *
+ * If the receive buffer fills, the index will simply sit at the last position
+ * in the buffer, constantly overwriting it. This could be problematic if
+ * waiting on two characters, such as a newline and carriage return.
+*/
+
+#include "uart.h"
+
+static int uartTxData;                                          // UART internal variable for TX
+volatile static unsigned char gUartBufSize = 0;                 // Size of receive buffer
+volatile static volatile char * gUartRxBuffer = 0;              // Pointer to start of receive buf
 volatile unsigned int uartRxBufferIndex = 0;                    // External, zero elsewhere
+
 
 /* Configure pins for duplex UART */
 void uartSetupPins(void)
@@ -20,7 +40,10 @@ void uartSetupPins(void)
 }
 
 
-/* Configure Timer A for duplex UART */
+/* Configure Timer A for duplex UART and registers the memory to store
+ * recieved characters. 
+ * pBuffer - a pointer to the array where the received characters will go. 
+ * sizeOfBuffer - the size of the created array. */
 void uartInit(volatile char * pBuffer, volatile unsigned char sizeOfBuffer)
 {
     __enable_interrupt();
@@ -31,13 +54,39 @@ void uartInit(volatile char * pBuffer, volatile unsigned char sizeOfBuffer)
     gUartBufSize = sizeOfBuffer;
 }
 
-/* Disable Timer A for duplex UART */
+
+/* Disable Timer A for duplex UART.*/
 void uartDisable(void)
 {
-    __disable_interrupt();
     TACCTL0 = 0x00;                                                 
     TACCTL1 = 0x00;                                 
     TACTL = 0x00;                                           
+}
+
+
+/* Print one byte over UART 
+ * byte - character to transmit.*/
+void uartTx(const char byte)
+{
+    while (TACCTL0 & CCIE);                                     // Ensure last char got TX'd
+    TACCR0 = TAR;                                               // Current state of TA counter
+    TACCR0 += UART_TBIT;                                        // One bit time till first bit
+    TACCTL0 = OUTMOD0 + CCIE;                                   // Set TXD on EQU0, Int
+    uartTxData = byte;                                          // Load global variable
+    uartTxData |= 0x100;                                        // Add mark stop bit to TXData
+    uartTxData <<= 1;                                           // Add space start bit
+    _BIS_SR(LPM0_bits);                                         // Enter LMP0 for duration
+}
+
+
+/* Print a NULL terminated string over UART.
+ * string - null terminated sting to transmit over UART. */
+void uartPrint(const char * string)
+{
+    while (*string) 
+    {
+        uartTx(*string++);
+    }
 }
 
 
@@ -59,16 +108,21 @@ interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
         else 
         {
             rxData >>= 1;
+
             if (TACCTL1 & SCCI)                                 // Get bit waiting in receive latch
             {  
                 rxData |= 0x80;
             }
+
             rxBitCnt--;
+
             if (rxBitCnt == 0)                                  // All bits RXed?
             {
-                if (uartRxBufferIndex < gUartBufSize)           // If at end of buffer overwrite last char
+                gUartRxBuffer[uartRxBufferIndex] = rxData;
+
+                /* Ensure buffer is only incremented when not at the end */
+                if (uartRxBufferIndex < (gUartBufSize - 1))
                 {
-                    gUartRxBuffer[uartRxBufferIndex] = rxData;  // Store in global variable
                     uartRxBufferIndex++;
                 }
 
@@ -78,31 +132,8 @@ interrupt(TIMER0_A1_VECTOR) Timer0_A1_ISR(void)
             }
         }
     }
-
 }
 
-
-/* Print one byte over UART */
-void uartTx(const char byte)
-{
-    while (TACCTL0 & CCIE);                                     // Ensure last char got TX'd
-    TACCR0 = TAR;                                               // Current state of TA counter
-    TACCR0 += UART_TBIT;                                        // One bit time till first bit
-    TACCTL0 = OUTMOD0 + CCIE;                                   // Set TXD on EQU0, Int
-    uartTxData = byte;                                          // Load global variable
-    uartTxData |= 0x100;                                        // Add mark stop bit to TXData
-    uartTxData <<= 1;                                           // Add space start bit
-    _BIS_SR(LPM0_bits);                                         // Enter LMP0 for duration
-}
-
-/* Print a NULL terminated string over UART */
-void uartPrint(const char * string)
-{
-    while (*string) 
-    {
-        uartTx(*string++);
-    }
-}
 
 /* Transmit interrupt handler */
 interrupt(TIMER0_A0_VECTOR) Timer0_A0_ISR(void)

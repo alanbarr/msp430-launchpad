@@ -9,13 +9,13 @@
 
 #include "legacymsp430.h"
 #include "msp430.h"
-#include "time430.h"
+#include "time430.h"                                       
     
 #define UART_TXD        0x02                                // TXD on P1.1 (Timer0_A.OUT0)
 #define UART_RXD        0x04                                // RXD on P1.2 (Timer0_A.CCI1A)
 
-#define UART_TBIT_DIV_2     (TIME430_CLOCK_HZ/ (9600 * 2))
 #define UART_TBIT           (TIME430_CLOCK_HZ / 9600)
+#define UART_TBIT_DIV_2     (UART_TBIT / 2)
 
 extern volatile unsigned int uartRxBufferIndex;
 
