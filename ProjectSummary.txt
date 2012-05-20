@@ -46,6 +46,14 @@ lcd
 
 lcdClock
     summary:    Displays uptime on a ST7066 LCD
-    hw:         Launchpad +watch crystal + ST7066/HD44780 LCD
+    hw:         Launchpad + watch crystal + ST7066/HD44780 LCD
     compiler:   mspgcc
     code:       Using TimerA with a watch crystal. Using lcd code from common.
+
+
+proj_tvTimer
+    summary:    Acts as a TV reminder, changing the channel at the correct time.
+    hw:         Launchpad + watch crystal + IR LED + transistor + resistors
+    compiler:   mspgcc
+    code:       TimerA to produce IR carrier wave. S/W RTC. CLI. Uart.
+    

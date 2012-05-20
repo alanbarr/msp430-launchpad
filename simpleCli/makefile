@@ -12,7 +12,7 @@ $(OUTPUT):
 		  										commandFunctions.c \
                                                 ../common/src/uart.c \
                                                 ../common/lib/usefulFunctions.a
-	echo "Made with Frequency $(FREQ) MHz"
+	@echo "Made with Frequency $(FREQ) MHz"
 
 clean:
 	-rm $(OUTPUT)

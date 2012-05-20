@@ -9,15 +9,15 @@ all: clean $(OUTPUT)
 $(OUTPUT):
 	$(CC) $(CCFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -o $(OUTPUT) main.c \
 									   ../common/src/uart.c
-	echo "Made with Frequency $(FREQ) MHz"
+	@echo "Made with Frequency $(FREQ) MHz"
 
 preprocess:
 	$(CC) $(CCFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -E main.c
-	echo "Made with Frequency $(FREQ) MHz"
+	@echo "Made with Frequency $(FREQ) MHz"
 
 compile:
 	$(CC) $(CCFLAGS) $(CPPFLAGS) -mmcu=$(TARGET) -S main.c
-	echo "Made with Frequency $(FREQ) MHz"
+	@echo "Made with Frequency $(FREQ) MHz"
 
 clean:
 	-rm $(OUTPUT)

@@ -19,7 +19,7 @@ i2c
     1.6 is SCL
     1.7 is SDA
   
-LCD
+lcd_st7066
     The LCD code allows interaction with a ST7066 / HD4470 LCD. In LCD.h the 
     pins being used are defined. The only stipulation is that the Data pins
     (DB4-DB7) are on the same port on the mcu and the Command pins (RS,RW and 
