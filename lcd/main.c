@@ -1,4 +1,4 @@
-/* Author: Alan Bar 
+/* Author: Alan Barr
 ** Created: Feb 2012 
 ** Compiler: mspgcc
 */
