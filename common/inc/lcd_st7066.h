@@ -5,11 +5,17 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#define LCD_READING_FUNCTIONALITY           1       /*Set to zero to remove reading functions from binary*/
-
 #include "msp430.h"
 #include "ST7066_HD44780.h"     /* LCD Header */
 #include "time430.h"
+
+/* LCD_READING_FUNCTIONALITY
+ * If not defined in the makefile or elsewhere, set here. 
+ * 0 Removes the reading functions.
+ * 1 Adds in the reading functions. */
+#ifndef LCD_READING_FUNCTIONALITY
+#define LCD_READING_FUNCTIONALITY           0      
+#endif
 
 /*Below are the defines that can be changed*/
 

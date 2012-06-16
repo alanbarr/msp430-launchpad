@@ -1,16 +1,9 @@
 /* Author: Alan Barr 
  * Created: January 2012 */
 
-/* Provides initialisation for the LCD.
-** LCD connected pins are changed to low outputs.
-** LCD initalisation routine is conducted, after which LCD is
-**  put into 4 bit mode, display cleared and returned to, 
-**  home. The cursor is set to move right and the display 
-**  is finally turned on.
-*/
-
 #include "lcd_st7066.h"
 
+/* Helper Functions */
 static void lcdSetUpperNibble(const char data);
 static void lcdSetLowerNibble(const char data);
 static void clock(void);
@@ -20,6 +13,14 @@ static char lcdReadUpperNibble(void);
 static char lcdReadLowerNibble(void);
 #endif
 
+
+/* Provides initialisation for the LCD.
+ * LCD connected pins are changed to low outputs.
+ * LCD initialisation routine is conducted, after which LCD is
+ * put into 4 bit mode, display cleared and returned to, 
+ * home. The cursor is set to move right and the display 
+ * is finally turned on.
+ */
 void lcdInit(void)
 {   
     /* Setup LCD pins as output - leave other pins as input */
@@ -28,7 +29,7 @@ void lcdInit(void)
 
     LCD_STARTUP_WAIT();
 
-    /*Set startup sequence to ensure correct initalisation of lcd*/
+    /*Set startup sequence to ensure correct initialisation of lcd*/
     /*First*/
     lcdSetUpperNibble(ST7066_START_UP_COMMAND);
     clock();
@@ -56,12 +57,12 @@ void lcdInit(void)
     LCD_DISPLAY_ON_OFF(ST7066_DISPLAY_ON);
 }
 
-/*Writes a null terminated string to the lcd.*/
+/* Writes a null terminated string to the lcd. */
 void lcdPrint(const char const * string)
 {
     int index = 0;
 
-    while(string[index] != '\0')
+    while (string[index] != '\0')
     {
         lcdWriteDataToRam(string[index]);
         index++;
@@ -112,69 +113,80 @@ void lcdWriteDataToRam(const char data)
 }
 
 
-/*Sets the correct data bits to upper nibble*/
+/* Sets the correct data bits to upper nibble. */
 static void lcdSetUpperNibble(const char data)
 {
     /*Set data pins lows*/
     LCD_DATA_PINS_PORT_OUT &= ~LCD_DATA_PINS;
 
-    if(data & BIT7)
+    if (data & BIT7)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB7;
     }
 
-    if(data & BIT6)
+    if (data & BIT6)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB6;
     }
 
-    if(data & BIT5)
+    if (data & BIT5)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB5;
     }
 
-    if(data & BIT4)
+    if (data & BIT4)
     {
         LCD_DATA_PINS_PORT_OUT |= LCD_DB4;
     }
 }
 
-/*Sets the correct data bits to lower nibble*/
+/* Sets the correct data bits to lower nibble. */
 static void lcdSetLowerNibble(const char data)
 {
     /*Set data pins low*/
     LCD_DATA_PINS_PORT_OUT &= ~LCD_DATA_PINS;
 
-    if(data & BIT3)
+    if (data & BIT3)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB7;
     }
 
-    if(data & BIT2)
+    if (data & BIT2)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB6;
     }
 
-    if(data & BIT1)
+    if (data & BIT1)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB5;
     }
 
-    if(data & BIT0)
+    if (data & BIT0)
     {
         LCD_DATA_PINS_PORT_OUT |=  LCD_DB4;
     }
 }
 
-/*Below here are functions to read from the LCD module.
-  Set LCD_READING_FUNCTIONALITY in lcd.h to 0 to not 
-  compile this*/
+
+static void clock(void)
+{
+    LCD_SET_E_HIGH(); 
+    LCD_E_WAIT();
+    LCD_SET_E_LOW();
+    LCD_E_WAIT();
+}
+
+
+/* Below here are functions to read from the LCD module.
+ * Set LCD_READING_FUNCTIONALITY in lcd.h to 0 to not 
+ * compile this
+*/
 #if LCD_READING_FUNCTIONALITY
 static char lcdReadUpperNibble(void)
 {
     char data = 0x00;
 
-    if(LCD_DATA_PINS_PORT_IN & LCD_DB7)
+    if (LCD_DATA_PINS_PORT_IN & LCD_DB7)
     {
         data |= BIT7;
     }
@@ -184,7 +196,7 @@ static char lcdReadUpperNibble(void)
         data |= BIT6;
     }
 
-    if(LCD_DATA_PINS_PORT_IN & LCD_DB5)
+    if (LCD_DATA_PINS_PORT_IN & LCD_DB5)
     {
         data |= BIT5;
     }
@@ -202,7 +214,7 @@ static char lcdReadLowerNibble(void)
 {
     char data = 0x00;
 
-    if(LCD_DATA_PINS_PORT_IN & LCD_DB7)
+    if (LCD_DATA_PINS_PORT_IN & LCD_DB7)
     {
         data |= BIT3;
     }
@@ -212,7 +224,7 @@ static char lcdReadLowerNibble(void)
         data |= BIT2;
     }
 
-    if(LCD_DATA_PINS_PORT_IN & LCD_DB5)
+    if (LCD_DATA_PINS_PORT_IN & LCD_DB5)
     {
         data |= BIT1;
     }
@@ -225,13 +237,6 @@ static char lcdReadLowerNibble(void)
     return data;
 }
 
-static void clock(void)
-{
-    LCD_SET_E_HIGH(); 
-    LCD_E_WAIT();
-    LCD_SET_E_LOW();
-    LCD_E_WAIT();
-}
 
 /*TODO*/
 char lcdReadDataFromRam(void)

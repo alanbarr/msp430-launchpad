@@ -1,4 +1,5 @@
 #include "i2cTemperatureSensor.h"
+
 void i2cTSRead(const char tempAddress, char * buffer)
 {
     /* Move Temperature Sensor pointer to temperature register */
