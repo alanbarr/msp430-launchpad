@@ -11,7 +11,7 @@ $(OUTPUT):
 	  											main.c \
 		  										commandFunctions.c \
                                                 ../../common/src/uart.c \
-                                                ../../common/lib/usefulFunctions.a
+                                                ../../common/lib/stringFunctions.a
 	@echo "Made with Frequency $(FREQ) MHz"
 
 clean:

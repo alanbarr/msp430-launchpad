@@ -2,7 +2,7 @@
 ** Author: Alan Barr 
 ** Created: 2011
 */
-#include "usefulFunctions.h"
+#include "stringFunctions.h"
 
 /*
     Zeros out an area of memory

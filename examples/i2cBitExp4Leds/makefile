@@ -7,7 +7,7 @@ OUTPUT=expander4Leds.elf
 all: clean $(OUTPUT)
 
 $(OUTPUT):
-	$(CC) $(CFLAGS) -o $(OUTPUT) -mmcu=$(TARGET) ../../common/src/i2c.c main.c ../../common/lib/usefulFunctions.a
+	$(CC) $(CFLAGS) -o $(OUTPUT) -mmcu=$(TARGET) ../../common/src/i2c.c main.c 
 
 clean:
 	-rm $(OUTPUT)

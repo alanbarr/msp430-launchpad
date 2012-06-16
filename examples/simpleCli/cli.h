@@ -11,7 +11,7 @@
 #include "time430.h"
 #include "msp430g2553.h"
 #include "uart.h"
-#include "usefulFunctions.h"            
+#include "stringFunctions.h"            
 #include "commandFunctions.h"
 
 #define LED1 0x01

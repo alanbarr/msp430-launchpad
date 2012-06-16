@@ -2,8 +2,8 @@
 ** Author: Alan Barr 
 ** Created: 2011
 */
-#include "usefulFunctions.h"
-
+#include "stringFunctions.h"
+#include "math.h"
 void floatToString(float floatingNumber, char * floatString, int decimals)
 {
 	char tempFloatString[7];
@@ -33,7 +33,7 @@ void floatToString(float floatingNumber, char * floatString, int decimals)
 	}
 	
 	floatString[index] = '.';
-	tempValue = (int)(floatingNumber * (float)power(10,decimals) );
+	tempValue = (int)(floatingNumber * (float)pow(10,decimals));
 	
 	tempIndex = index;
 	

@@ -2,7 +2,7 @@
 ** Author: Alan Barr 
 ** Created: 2011
 */
-#include "usefulFunctions.h"
+#include "stringFunctions.h"
 
 /*  
     Compares a string to a base or master string.

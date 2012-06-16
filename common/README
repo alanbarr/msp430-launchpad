@@ -1,4 +1,4 @@
-Common contains various.
+Common contains various reusable libraries / source code.
 
 usefulFunctions
     Run "make usefulFunctions" from common to create the library in common/lib. 

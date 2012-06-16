@@ -2,7 +2,8 @@
 ** Author: Alan Barr
 ** Created: 2011
 */
-#include "usefulFunctions.h"
+#include "stringFunctions.h"
+#include "math.h"
 
 unsigned int stringToUnsignedInt(char * integerString)
 {
@@ -19,7 +20,7 @@ unsigned int stringToUnsignedInt(char * integerString)
     while (length && length <= 6)
     {
         length--;
-        value += integerString[index++] * power(10,length);
+        value += integerString[index++] * pow(10,length);
     }
     return value;
 }
