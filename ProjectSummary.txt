@@ -7,6 +7,12 @@ simpleCli
     compiler:   mspgcc
     code:       Example of of software reset by incorrect watchdog password. Bit Banged UART.
 
+simpleSwitch
+    summary:    Toggle Launchpad LEDs by pressing the switch
+    hw:         Launchpad
+    compiler:   mspgcc
+    code:       Example of a polled switch.
+
 crystalTest
     summary:    Fault testing of a 32768 Hz crystal
     hw:         Launchpad + 32768 Hz watch crystal (I used a 6 pF crystal, change BCSCTL3 as required)
