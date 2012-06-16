@@ -19,14 +19,18 @@ msp430 mcu's, and I will try to clearly comment the code. If I ever do get aroun
 to a reasonable project I will do my best to explain all the important details.
 
 I intend to update this repo fairly often with smaller projects and code examples.
-Any larger, more functional projects will be highlighted in projectSummary.txt.
 
 Most code that I write will most likely be for mspgcc but I will make clear what
 compiler was used. The only things that generally have to be changed when moving 
 between ccs and mspgcc are the interrupts and potentially some header files.
 
-See projectSummary.txt for an idea of what is used in each "project", if you are 
-after a particular example. 
+Directory Structure
+common      Generic C code used in examples/projects.
+examples    Small code examples
+projects    Larger more featured projects
+
+See projectSummary.txt in the examples and projects directories for an idea of
+what is used in each "project", if you are after a particular example. 
 
 All mspgcc code folders should be accompanied by a makefile - to build type "make"
 from the terminal.
