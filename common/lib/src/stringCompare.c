@@ -13,25 +13,26 @@
 */
 int stringCompare(char * masterString, char * comparisonString)
 {
-	int rtn = -1;
-	
-	while(*masterString == *comparisonString)
+    int rtn = -1;
+    
+    while (*masterString == *comparisonString)
+    {
+        if (*masterString == '\0' )
         {
-            if(*masterString == '\0' )
-            {
-                rtn = 0;            
-                break;
-            }
-            else if( *(masterString+1) == '\0' && (*(comparisonString+1) == ' ' || 
-                     *(comparisonString+1) == '\n' || *(comparisonString+1) == '\r'))                          
-            {
-                rtn = 1;   
-                break;
-            }
-
-            masterString++;
-            comparisonString++;
+            rtn = 0;            
+            break;
         }
-	return rtn;
+
+        else if ( *(masterString+1) == '\0' && (*(comparisonString+1) == ' ' || 
+                  *(comparisonString+1) == '\n' || *(comparisonString+1) == '\r'))                          
+        {
+            rtn = 1;   
+            break;
+        }
+
+        masterString++;
+        comparisonString++;
+    }
+    return rtn;
 }
 

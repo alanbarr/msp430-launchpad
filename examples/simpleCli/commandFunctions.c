@@ -18,33 +18,33 @@ const tCommandStruct commandList[COMMANDLISTSIZE]= {{"led one on",&(led1On)},
 
 void led1On(void)
 {
-	P1OUT |= LED1;
+    P1OUT |= LED1;
 }
 
 void led2On(void)
 {
-	P1OUT |= LED2;
+    P1OUT |= LED2;
     PRINT("TWO\n\r");
 }
 
 void led1Off(void)
 {
-	P1OUT &= ~LED1;
+    P1OUT &= ~LED1;
 }
 
 void led2Off(void)
 {
-	P1OUT &= ~LED2;
+    P1OUT &= ~LED2;
 }
 
 void led1Toggle(void)
 {
-	P1OUT ^= LED1;
+    P1OUT ^= LED1;
 }
 
 void led2Toggle(void)
 {
-	P1OUT ^= LED2;
+    P1OUT ^= LED2;
 }
 
 /* Resets mcu by writing to Watchdog Register without specifying password. */
@@ -55,14 +55,14 @@ void reset(void)
 
 void cliHelp(void)
 {
-	int ctr;
-	PRINT("Options:\n\r");
-	
-	for(ctr=0;ctr<COMMANDLISTSIZE-1;ctr++)
-	{
-		PRINT(commandList[ctr].commandString);
-		PRINT("\n\r");
-	}
+    int ctr;
+    PRINT("Options:\n\r");
+    
+    for(ctr=0;ctr<COMMANDLISTSIZE-1;ctr++)
+    {
+        PRINT(commandList[ctr].commandString);
+        PRINT("\n\r");
+    }
 }
 
 

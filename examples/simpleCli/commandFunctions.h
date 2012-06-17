@@ -7,8 +7,8 @@
 #define COMMANDLISTSIZE 8
 
 typedef struct sCommandStruct {char * commandString;
-							   void (*function)(void);
-							  } tCommandStruct;
+                               void (*function)(void);
+                              } tCommandStruct;
 
 extern const tCommandStruct commandList[COMMANDLISTSIZE];
 

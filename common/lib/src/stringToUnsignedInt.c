@@ -7,7 +7,7 @@
 
 unsigned int stringToUnsignedInt(char * integerString)
 {
-	unsigned int index = 0;
+    unsigned int index = 0;
     unsigned int length = 0;
     unsigned int value = 0;
 

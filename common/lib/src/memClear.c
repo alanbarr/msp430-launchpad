@@ -9,11 +9,11 @@
 */
 void memClear(char * dataPtr, unsigned int numberOfBytes)
 {
-	int ctr;
+    int ctr;
 
-	for(ctr=0;ctr<numberOfBytes;ctr++)
-	{
-		dataPtr[ctr] = 0x00;
-	}
+    for(ctr=0;ctr<numberOfBytes;ctr++)
+    {
+        dataPtr[ctr] = 0x00;
+    }
 }
 

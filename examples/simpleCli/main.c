@@ -30,40 +30,40 @@ int main(void)
 
     P1DIR = LED1 + LED2;                    // LED pins outputs and high
     P1OUT = LED1 + LED2;
-	
+    
     uartSetupPins();       
-	uartInit(uartRxBuffer, UARTBUFSIZE);
+    uartInit(uartRxBuffer, UARTBUFSIZE);
 
-	memClear((char *)uartRxBuffer, UARTBUFSIZE);
-	PRINT("Cli Started.\n\r");
+    memClear((char *)uartRxBuffer, UARTBUFSIZE);
+    PRINT("Cli Started.\n\r");
     cliHelp();
-	PRINT(PROMPT);
+    PRINT(PROMPT);
     
     /* Loop constantly checks UART buffer for a newline or carriage return.
      * If it finds one it calls the parser to check if it was a valid command.
      * The uartBuffer is handled here for overflow. 
      */
-	while(1)
-	{   
+    while(1)
+    {   
         if(uartRxBufferIndex >= UARTBUFSIZE)
-		{
-			uartRxBufferIndex = 0;
-			memClear((char*)uartRxBuffer, sizeof(uartRxBuffer));
-			PRINT(PROMPT);
-		}
+        {
+            uartRxBufferIndex = 0;
+            memClear((char*)uartRxBuffer, sizeof(uartRxBuffer));
+            PRINT(PROMPT);
+        }
 
         /* If last char received was a newline, parse */
-		else if(uartRxBuffer[uartRxBufferIndex -1] == '\n' || 
+        else if(uartRxBuffer[uartRxBufferIndex -1] == '\n' || 
                 uartRxBuffer[uartRxBufferIndex -1] == '\r')
-		{
-			uartRxBuffer[uartRxBufferIndex - 1] = '\0';
-			commandParser((char *)uartRxBuffer, (tCommandStruct *)commandList);
-			uartRxBufferIndex = 0;
-			memClear((char *)uartRxBuffer, UARTBUFSIZE );
-			PRINT(PROMPT);
-		}
-	}
-    return 0;	
+        {
+            uartRxBuffer[uartRxBufferIndex - 1] = '\0';
+            commandParser((char *)uartRxBuffer, (tCommandStruct *)commandList);
+            uartRxBufferIndex = 0;
+            memClear((char *)uartRxBuffer, UARTBUFSIZE );
+            PRINT(PROMPT);
+        }
+    }
+    return 0;   
 }
 
 /* Function runs through all commands in argument of tCommandStruct comparing with
@@ -71,13 +71,13 @@ int main(void)
  */
 static void commandParser(char * stringToParse, tCommandStruct * commandStructPtr)
 {
-	int ctr;
+    int ctr;
     
     for(ctr = 0; ctr < COMMANDLISTSIZE; ctr++)
     {
         if (stringCompare(commandStructPtr[ctr].commandString, stringToParse) >= 0)
         {
-        	commandStructPtr[ctr].function();
+            commandStructPtr[ctr].function();
         }
     }
 }
