@@ -3,17 +3,18 @@
 ** Created: 2011
 */
 /* Builds with mspgcc */
-/* This project demonstrates a simple command line interface on the launchpad
-** Communication with the launchpad is achieved over the usb UART interface
-** using a bit banged Timer A based UART. 
+/* This project demonstrates a simple command line interface on the Launchpad.
+** Communication with the launchpad is achieved over the USB UART interface
+** using a hardware UART. For this to work, the two jumpers on the Launchpad for
+** UART should be aligned horizontally (perpendicular to the other jumpers).
 ** A program such as HyperTerminal (Windows) or Minicom/CuteCom (Linux)
 ** can be used to communicate with the Launchpad. (On Linux the Launchpad shows 
-** up as /dev/ACM0.
+** up as /dev/ACM0).
 ** Strings received at the MSP430 are parsed to see if they match the commands
 ** defined in a command structure. If they do, their counter part functions 
 ** are called via function pointers.
 ** This example requires only a launchpad, so the examples are rather basic.
-** You can turn on, off or toggle the launchpad leds.
+** You can turn on, off or toggle the launchpad LEDs.
 */
 #include "cli.h"
 
