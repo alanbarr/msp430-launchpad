@@ -2,7 +2,7 @@ CC=msp430-gcc
 CFLAGS= -Wall -g -Os
 CPPFLAGS=
 TARGET=msp430g2553
-OUTPUT=simpleSwitch.elf
+OUTPUT=switchLeds.elf
 all: clean $(OUTPUT)
 
 $(OUTPUT):
