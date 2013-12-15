@@ -1,0 +1,3 @@
+target remote :2000
+erase all
+load
