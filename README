@@ -1,14 +1,11 @@
 ****** msp430-launchpad ******
-Much of the code will be simply me experimenting with different features of the
-msp430 mcu's, and I will try to clearly comment the code. If I ever do get around
-to a reasonable project I will do my best to explain all the important details.
 
-I intend to update this repo fairly often with smaller projects and code examples.
+Some (unmaintained) example code and experiments with TI's MSP-EXP430G2
+Launchpad.
 
-Most code that I write will most likely be for mspgcc but I will try and make 
-clear what compiler was used. The only things that generally have to be changed 
-when moving between ccs and mspgcc are the interrupts and potentially some
-header files.
+They are targeted towards the mspgcc tool chain. Porting to a different
+tool chain should hopefully require little more than interrupt and header file
+changes.
 
 Directory Structure
 common      Generic C code used in examples/projects.
@@ -47,8 +44,7 @@ http://mspsci.blogspot.com/
 http://www.msp430launchpad.com/
 http://e2e.ti.com/blogs_/b/msp430blog/default.aspx
 
-I feel it is worth mentioning here that a lot of the hardware setup's I use 
-were based on the following TI code examples: 
+Much of the hardware configuration was based on TI's example code:
 G2xx1 http://www.ti.com/lit/zip/slac463
 G2xx2 http://www.ti.com/lit/zip/slac467
 G2xx3 http://www.ti.com/lit/zip/slac485
